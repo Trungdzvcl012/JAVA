@@ -1,0 +1,86 @@
+-- Tạo bảng người_dung
+CREATE TABLE nguoi_dung (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    ho_ten VARCHAR(100) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    mat_khau VARCHAR(255) NOT NULL,
+    so_dien_thoai VARCHAR(20),
+    ngay_sinh VARCHAR(20),
+    dia_chi VARCHAR(255),
+    anh_dai_dien VARCHAR(255),
+    vai_tro VARCHAR(20) NOT NULL,
+    da_kich_hoat BOOLEAN DEFAULT TRUE,
+    thoi_gian_tao TIMESTAMP
+);
+
+-- Tạo bảng dich_vu
+CREATE TABLE dich_vu (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    ten_dich_vu VARCHAR(255) NOT NULL,
+    mo_ta TEXT,
+    gia_dich_vu DECIMAL(15,2) NOT NULL,
+    thoi_gian_du_kien INT,
+    hinh_anh VARCHAR(255),
+    dang_khuyen_mai BOOLEAN DEFAULT FALSE,
+    gia_khuyen_mai DECIMAL(15,2)
+);
+
+-- Tạo bảng lich_lam_viec
+CREATE TABLE lich_lam_viec (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    bac_si_id BIGINT NOT NULL,
+    ngay_lam_viec DATE NOT NULL,
+    gio_bat_dau TIME NOT NULL,
+    gio_ket_thuc TIME NOT NULL,
+    trang_thai VARCHAR(20) NOT NULL,
+    ghi_chu VARCHAR(255),
+    FOREIGN KEY (bac_si_id) REFERENCES nguoi_dung(id)
+);
+
+-- Tạo bảng lich_hen
+CREATE TABLE lich_hen (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    benh_nhan_id BIGINT NOT NULL,
+    bac_si_id BIGINT NOT NULL,
+    dich_vu_id BIGINT NOT NULL,
+    thoi_gian_hen TIMESTAMP NOT NULL,
+    trang_thai VARCHAR(20) NOT NULL,
+    ly_do_kham VARCHAR(255),
+    ghi_chu VARCHAR(255),
+    thoi_gian_tao TIMESTAMP,
+    thoi_gian_cap_nhat TIMESTAMP,
+    FOREIGN KEY (benh_nhan_id) REFERENCES nguoi_dung(id),
+    FOREIGN KEY (bac_si_id) REFERENCES nguoi_dung(id),
+    FOREIGN KEY (dich_vu_id) REFERENCES dich_vu(id)
+);
+
+-- Tạo bảng benh_an
+CREATE TABLE benh_an (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    lich_hen_id BIGINT NOT NULL,
+    bac_si_id BIGINT NOT NULL,
+    chan_doan TEXT,
+    phac_do_dieu_tri TEXT,
+    don_thuoc TEXT,
+    ghi_chu TEXT,
+    hinh_anh_x_quang VARCHAR(255),
+    hinh_anh_khac VARCHAR(255),
+    thoi_gian_tao TIMESTAMP,
+    thoi_gian_cap_nhat TIMESTAMP,
+    FOREIGN KEY (lich_hen_id) REFERENCES lich_hen(id),
+    FOREIGN KEY (bac_si_id) REFERENCES nguoi_dung(id)
+);
+
+-- Tạo bảng hoa_don
+CREATE TABLE hoa_don (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    lich_hen_id BIGINT NOT NULL,
+    tong_tien DECIMAL(15,2) NOT NULL,
+    da_thanh_toan DECIMAL(15,2) DEFAULT 0,
+    trang_thai VARCHAR(20) NOT NULL,
+    phuong_thuc_thanh_toan VARCHAR(50),
+    ma_giao_dich VARCHAR(255),
+    thoi_gian_tao TIMESTAMP,
+    thoi_gian_thanh_toan TIMESTAMP,
+    FOREIGN KEY (lich_hen_id) REFERENCES lich_hen(id)
+);
