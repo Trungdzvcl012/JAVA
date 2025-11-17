@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo Thống kê - Hệ thống Nha khoa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .stat-card {
+            transition: transform 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .progress {
+            height: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/quan-tri/dashboard}">
+                <i class="fas fa-chart-bar me-2"></i>
+                BÁO CÁO THỐNG KÊ
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link text-white" th:href="@{/quan-tri/dashboard}">
+                    <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+                </a>
+                <a class="nav-link text-white" th:href="@{/}">
+                    <i class="fas fa-home me-1"></i> Trang chủ
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h6 class="mb-0"><i class="fas fa-bars me-2"></i>MENU QUẢN TRỊ</h6>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <a th:href="@{/quan-tri/dashboard}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                        <a th:href="@{/quan-tri/nguoi-dung}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-users me-2"></i>Quản lý Người dùng
+                        </a>
+                        <a th:href="@{/quan-tri/dich-vu}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-teeth me-2"></i>Quản lý Dịch vụ
+                        </a>
+                        <a th:href="@{/quan-tri/lich-hen}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-calendar-alt me-2"></i>Quản lý Lịch hẹn
+                        </a>
+                        <a th:href="@{/quan-tri/hoa-don}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-file-invoice-dollar me-2"></i>Quản lý Hóa đơn
+                        </a>
+                        <a th:href="@{/quan-tri/bao-cao}" class="list-group-item list-group-item-action active">
+                            <i class="fas fa-chart-bar me-2"></i>Báo cáo Thống kê
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="mb-1"><i class="fas fa-chart-bar text-primary me-2"></i>Báo cáo Thống kê</h2>
+                        <p class="text-muted mb-0">Tổng quan và phân tích hiệu suất hệ thống</p>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-outline-primary">
+                            <i class="fas fa-download me-2"></i>Xuất Excel
+                        </button>
+                        <button class="btn btn-outline-success">
+                            <i class="fas fa-print me-2"></i>In Báo cáo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bộ lọc thời gian -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-3">
+                                <label class="form-label">Loại báo cáo</label>
+                                <select class="form-select">
+                                    <option value="daily">Theo ngày</option>
+                                    <option value="weekly">Theo tuần</option>
+                                    <option value="monthly" selected>Theo tháng</option>
+                                    <option value="quarterly">Theo quý</option>
+                                    <option value="yearly">Theo năm</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Từ ngày</label>
+                                <input type="date" class="form-control" value="2024-12-01">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Đến ngày</label>
+                                <input type="date" class="form-control" value="2024-12-15">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-primary w-100">
+                                    <i class="fas fa-chart-line me-2"></i>Xem Báo cáo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thống kê tổng quan -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="card stat-card bg-primary text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h3>48.5M ₫</h3>
+                                        <p class="mb-0">Doanh thu</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-money-bill-wave fa-2x opacity-50"></i>
+                                    </div>
+                                </div>
+                                <small>↑ 12% so với tháng trước</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card stat-card bg-success text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h3>156</h3>
+                                        <p class="mb-0">Lịch hẹn</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-calendar-check fa-2x opacity-50"></i>
+                                    </div>
+                                </div>
+                                <small>↑ 8% so với tháng trước</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card stat-card bg-info text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h3>89</h3>
+                                        <p class="mb-0">Bệnh nhân mới</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-user-plus fa-2x opacity-50"></i>
+                                    </div>
+                                </div>
+                                <small>↑ 15% so với tháng trước</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card stat-card bg-warning text-dark">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h3>94%</h3>
+                                        <p class="mb-0">Tỷ lệ hài lòng</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-smile fa-2x opacity-50"></i>
+                                    </div>
+                                </div>
+                                <small>→ Ổn định</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Biểu đồ và phân tích -->
+                <div class="row">
+                    <!-- Doanh thu theo dịch vụ -->
+                    <div class="col-md-6 mb-4">
+                        <div class="chart-container">
+                            <h5 class="mb-3">
+                                <i class="fas fa-chart-pie me-2 text-primary"></i>
+                                Doanh thu theo dịch vụ
+                            </h5>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Niềng răng</span>
+                                    <span class="text-success">25.0M ₫ (52%)</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" style="width: 52%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Tẩy trắng răng</span>
+                                    <span class="text-info">12.5M ₫ (26%)</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-info" style="width: 26%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Trám răng</span>
+                                    <span class="text-warning">6.0M ₫ (12%)</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning" style="width: 12%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Dịch vụ khác</span>
+                                    <span class="text-secondary">5.0M ₫ (10%)</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-secondary" style="width: 10%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lịch hẹn theo trạng thái -->
+                    <div class="col-md-6 mb-4">
+                        <div class="chart-container">
+                            <h5 class="mb-3">
+                                <i class="fas fa-chart-bar me-2 text-success"></i>
+                                Phân bố lịch hẹn
+                            </h5>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Đã hoàn thành</span>
+                                    <span class="text-success">128 (82%)</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" style="width: 82%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Đã xác nhận</span>
+                                    <span class="text-primary">18 (12%)</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" style="width: 12%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Chờ xác nhận</span>
+                                    <span class="text-warning">6 (4%)</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning" style="width: 4%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Đã hủy</span>
+                                    <span class="text-danger">4 (2%)</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-danger" style="width: 2%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bảng top dịch vụ -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-trophy me-2 text-warning"></i>
+                                    Top 5 dịch vụ phổ biến
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Dịch vụ</th>
+                                                <th>Số lượt đặt</th>
+                                                <th>Doanh thu</th>
+                                                <th>Tỷ lệ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Khám tổng quát</td>
+                                                <td>45</td>
+                                                <td>9,000,000 ₫</td>
+                                                <td><span class="badge bg-success">28.8%</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>Lấy cao răng</td>
+                                                <td>38</td>
+                                                <td>11,400,000 ₫</td>
+                                                <td><span class="badge bg-primary">24.4%</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>Trám răng</td>
+                                                <td>25</td>
+                                                <td>10,000,000 ₫</td>
+                                                <td><span class="badge bg-info">16.0%</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>4</td>
+                                                <td>Tẩy trắng răng</td>
+                                                <td>12</td>
+                                                <td>30,000,000 ₫</td>
+                                                <td><span class="badge bg-warning">7.7%</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>5</td>
+                                                <td>Nhổ răng khôn</td>
+                                                <td>8</td>
+                                                <td>12,000,000 ₫</td>
+                                                <td><span class="badge bg-secondary">5.1%</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thống kê bác sĩ -->
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-user-md me-2 text-info"></i>
+                                    Hiệu suất bác sĩ
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span>BS. Nguyễn Văn A</span>
+                                        <span class="text-success">42 lượt</span>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span>BS. Trần Thị B</span>
+                                        <span class="text-primary">38 lượt</span>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-primary" style="width: 76%"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span>BS. Lê Văn C</span>
+                                        <span class="text-info">35 lượt</span>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-info" style="width: 70%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-star me-2 text-warning"></i>
+                                    Đánh giá từ bệnh nhân
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <h1 class="text-warning">4.8</h1>
+                                    <div class="mb-2">
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star-half-alt text-warning"></i>
+                                    </div>
+                                    <p class="text-muted mb-0">Dựa trên 89 đánh giá</p>
+                                </div>
+                                <hr>
+                                <div class="small">
+                                    <div class="d-flex justify-content-between">
+                                        <span>5 sao</span>
+                                        <span>72 (81%)</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>4 sao</span>
+                                        <span>12 (13%)</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>3 sao</span>
+                                        <span>4 (4%)</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>2 sao</span>
+                                        <span>1 (1%)</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>1 sao</span>
+                                        <span>0 (0%)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
