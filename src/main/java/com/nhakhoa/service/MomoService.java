@@ -1,8 +1,8 @@
 package com.nhakhoa.service;
 
-import org.springframework.stereotype.Service;
 import com.nhakhoa.model.HoaDon;
 import com.nhakhoa.util.HmacSHA256;
+import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 @Service
 public class MomoService {
 
+    // Thay bằng thông tin sandbox / production của bạn
     private final String partnerCode = "YOUR_PARTNER_CODE";
     private final String accessKey = "YOUR_ACCESS_KEY";
     private final String secretKey = "YOUR_SECRET_KEY";
@@ -23,7 +24,7 @@ public class MomoService {
     public String createPaymentUrl(HoaDon hoaDon) {
         try {
             String orderId = hoaDon.getId().toString();
-            String amount = hoaDon.getTongTien().toString();
+            String amount = hoaDon.getTongTien().toBigInteger().toString(); // amount phải là số nguyên
             String orderInfo = "Thanh toán hóa đơn #" + orderId;
 
             Map<String, String> params = new HashMap<>();
@@ -37,16 +38,17 @@ public class MomoService {
             params.put("notifyUrl", returnUrl);
             params.put("requestType", requestType);
 
-            // Tạo rawSignature
+            // Tạo rawData theo chuẩn Momo
             String rawData = params.entrySet().stream()
                     .sorted(Map.Entry.comparingByKey())
                     .map(e -> e.getKey() + "=" + e.getValue())
                     .collect(Collectors.joining("&"));
 
+            // Tạo chữ ký HMAC SHA256
             String signature = HmacSHA256.hash(secretKey, rawData);
             params.put("signature", signature);
 
-            // Tạo URL để quét QR
+            // Tạo URL final
             String url = endpoint + "?" + params.entrySet().stream()
                     .map(e -> e.getKey() + "=" + URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8))
                     .collect(Collectors.joining("&"));
