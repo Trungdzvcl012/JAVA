@@ -1,14 +1,15 @@
 package com.nhakhoa.service;
 
-import org.springframework.stereotype.Service;
 import com.nhakhoa.model.HoaDon;
 import com.nhakhoa.util.HmacSHA256;
+import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,37 +22,29 @@ public class VnpayService {
 
     public String createPaymentUrl(HoaDon hoaDon) {
         try {
-            String amount = hoaDon.getTongTien().multiply(new java.math.BigDecimal(100)).toString();
-            String orderId = hoaDon.getId().toString();
-            String orderInfo = "Thanh toán hóa đơn #" + orderId;
-
-            Map<String, String> vnp_Params = new HashMap<>();
+            Map<String, String> vnp_Params = new TreeMap<>();
             vnp_Params.put("vnp_Version", "2.1.0");
             vnp_Params.put("vnp_Command", "pay");
             vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
-            vnp_Params.put("vnp_Amount", amount);
-            vnp_Params.put("vnp_CreateDate", java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
+            vnp_Params.put("vnp_Amount", hoaDon.getTongTien().multiply(java.math.BigDecimal.valueOf(100)).toBigInteger().toString());
             vnp_Params.put("vnp_CurrCode", "VND");
-            vnp_Params.put("vnp_TxnRef", orderId);
-            vnp_Params.put("vnp_OrderInfo", orderInfo);
+            vnp_Params.put("vnp_TxnRef", hoaDon.getId().toString());
+            vnp_Params.put("vnp_OrderInfo", "Thanh toán hóa đơn #" + hoaDon.getId());
             vnp_Params.put("vnp_ReturnUrl", returnUrl);
+            vnp_Params.put("vnp_CreateDate", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
 
-            // Tạo chữ ký
-            String rawData = vnp_Params.entrySet().stream()
-                    .sorted(Map.Entry.comparingByKey())
+            String hashData = vnp_Params.entrySet().stream()
                     .map(e -> e.getKey() + "=" + e.getValue())
                     .collect(Collectors.joining("&"));
 
-            String vnp_SecureHash = HmacSHA256.hash(vnp_HashSecret, rawData);
+            String vnp_SecureHash = HmacSHA256.hash(vnp_HashSecret, hashData);
             vnp_Params.put("vnp_SecureHash", vnp_SecureHash);
 
-            String url = vnp_Url + "?" + vnp_Params.entrySet().stream()
+            return vnp_Url + "?" + vnp_Params.entrySet().stream()
                     .map(e -> e.getKey() + "=" + URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8))
                     .collect(Collectors.joining("&"));
-
-            return url;
         } catch (Exception e) {
-            throw new RuntimeException("Lỗi tạo URL thanh toán VNPay", e);
+            throw new RuntimeException("Lỗi tạo URL VNPAY", e);
         }
     }
 }
