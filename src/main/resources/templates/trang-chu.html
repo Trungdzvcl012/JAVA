@@ -8,9 +8,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #4fc3f7;
-            --secondary-color: #e1f5fe;
-            --accent-color: #0288d1;
+            --primary-color: #4fc3f7; 
+            --secondary-color: #e1f5fe; 
+            --accent-color: #0288d1; 
             --text-color: #333;
             --light-color: #f8f9fa;
         }
@@ -45,12 +45,13 @@
             border: none;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; 
             margin-bottom: 30px;
         }
         
         .service-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2); 
         }
         
         .service-icon {
@@ -62,6 +63,11 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
+            transition: transform 0.3s ease; 
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.1); 
         }
         
         .doctor-card {
@@ -69,11 +75,12 @@
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; 
         }
         
         .doctor-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
         
         .doctor-img {
@@ -83,6 +90,11 @@
             object-fit: cover;
             margin: 0 auto 15px;
             border: 5px solid var(--secondary-color);
+            transition: border-color 0.3s ease;
+        }
+
+        .doctor-card:hover .doctor-img {
+            border-color: var(--primary-color);
         }
         
         .btn-primary {
@@ -91,11 +103,19 @@
             border-radius: 25px;
             padding: 10px 30px;
             font-weight: 600;
+            transition: all 0.3s ease; 
         }
         
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+            filter: brightness(1.1); 
+        }
+
+        .btn-primary:active {
+            transform: translateY(0); 
+            box-shadow: none;
+            filter: brightness(0.9);
         }
         
         .feature-box {
@@ -105,6 +125,12 @@
             background: white;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0,0,0,0.15);
         }
         
         footer {
@@ -112,19 +138,16 @@
             color: white;
             padding: 50px 0 20px;
         }
-
-        /* === CSS MỚI CHO BUTTON TRÊN NAVBAR === */
         .btn-nav-secondary,
         .btn-nav-primary {
-            padding: 6px 16px; /* Kích thước nhỏ gọn hơn */
-            border-radius: 25px; /* Bo góc giống .btn-primary */
+            padding: 6px 16px; 
+            border-radius: 25px; 
             font-weight: 600;
             text-decoration: none;
             transition: all 0.3s ease;
             display: inline-block;
         }
 
-        /* Nút "Đăng Nhập" (Viền) */
         .btn-nav-secondary {
             background-color: transparent;
             color: white;
@@ -133,22 +156,75 @@
 
         .btn-nav-secondary:hover {
             background-color: white;
-            color: var(--accent-color); /* Sử dụng màu --accent-color */
+            color: var(--accent-color); 
+            transform: translateY(-1px);
         }
 
-        /* Nút "Đăng Ký" (Nền đặc) */
         .btn-nav-primary {
             background-color: white;
-            color: var(--accent-color); /* Sử dụng màu --accent-color */
+            color: var(--accent-color); 
             border: 1px solid white;
         }
 
         .btn-nav-primary:hover {
             background-color: #f0f0f0;
             border-color: #f0f0f0;
+            transform: translateY(-1px);
         }
-        /* === KẾT THÚC CSS MỚI === */
 
+        .navbar-nav .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px; 
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: white;
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover::after,
+        .navbar-nav .nav-link.active::after {
+            width: 70%;
+            left: 15%;
+        }
+
+        footer a.text-white {
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        footer a.text-white:hover {
+            color: var(--primary-color) !important;
+            transform: scale(1.1);
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-section h1, .hero-section p {
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .service-card, .doctor-card, .feature-box {
+            animation: fadeInUp 0.8s ease-out;
+            opacity: 0; 
+            animation-fill-mode: forwards;
+        }
+
+       
+        .service-card { animation-delay: 0.1s; }
+        .doctor-card { animation-delay: 0.2s; }
+        .feature-box { animation-delay: 0.3s; }
     </style>
 </head>
 <body>
@@ -183,7 +259,7 @@
         <div class="container">
             <h1 class="display-4 fw-bold mb-4">Nụ Cười Tỏa Sáng - Tự Tin Tỏa Sáng</h1>
             <p class="lead mb-4">Chăm sóc nụ cười của bạn với đội ngũ bác sĩ chuyên nghiệp và công nghệ hiện đại</p>
-            <a href="/dang-ky" class="btn btn-light btn-lg">Đặt Lịch Ngay</a>
+            <a href="/dang-ky" class="btn btn-light btn-lg btn-primary">Đặt Lịch Ngay</a>
         </div>
     </section>
 
@@ -194,7 +270,9 @@
                 <p class="text-muted">Các dịch vụ chăm sóc răng miệng toàn diện</p>
             </div>
             <div class="row">
-                <div th:each="dichVu : ${dichVus}" class="col-md-4">
+                <div th:each="dichVu, stat : ${dichVus}" 
+                     class="col-md-4" 
+                     th:style="'animation-delay:' + (0.1 * ${stat.index} + 0.3) + 's;'"> 
                     <div class="service-card">
                         <div class="card-body text-center p-4">
                             <div class="service-icon">
@@ -216,43 +294,48 @@
         </div>
     </section>
 
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="fw-bold">Đội Ngũ Bác Sĩ</h2>
-                <p class="text-muted">Các chuyên gia hàng đầu trong lĩnh vực nha khoa</p>
-            </div>
-            <div class="row">
-                <div th:each="bacSi : ${bacSis}" class="col-md-4">
-                    <div class="doctor-card bg-white">
-                        <img th:src="${bacSi.anhDaiDien}" th:alt="${bacSi.hoTen}" class="doctor-img">
-                        <h5 th:text="${bacSi.hoTen}">Tên bác sĩ</h5>
-                        <p class="text-muted">Bác sĩ Nha khoa</p>
-                        <p class="small text-muted" th:text="${bacSi.diaChi}">Địa chỉ</p>
-                    </div>
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Đội Ngũ Bác Sĩ</h2>
+            <p class="text-muted">Các chuyên gia hàng đầu trong lĩnh vực nha khoa</p>
+        </div>
+        <div class="row">
+            <div th:each="bacSi, stat : ${bacSis}" 
+                class="col-md-4" 
+                th:style="'animation-delay:' + (0.1 * ${stat.index} + 0.4) + 's;'">
+                <div class="doctor-card bg-white">
+                  <img th:with="imagePath=${bacSi.anhDaiDien != null and bacSi.anhDaiDien != '' ? '/images/' + bacSi.anhDaiDien : '/images/doctor-default.jpg'}"
+                         th:src="@{${imagePath}}"
+                         th:alt="${bacSi.hoTen}" 
+                         class="doctor-img mb-3">
+                    <h5 th:text="${bacSi.hoTen}">Tên bác sĩ</h5>
+                    <p class="text-muted">Bác sĩ Nha khoa</p>
+                    <p class="small text-muted" th:text="${bacSi.diaChi}">Địa chỉ</p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <section class="py-5">
         <div class="container">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4" style="animation-delay: 0.5s;">
                     <div class="feature-box">
                         <i class="fas fa-clock text-primary fa-3x mb-3"></i>
                         <h4>Lịch Hẹn Linh Hoạt</h4>
                         <p>Đặt lịch trực tuyến 24/7, lựa chọn thời gian phù hợp với bạn</p>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4" style="animation-delay: 0.6s;">
                     <div class="feature-box">
                         <i class="fas fa-shield-alt text-primary fa-3x mb-3"></i>
                         <h4>An Toàn Tuyệt Đối</h4>
                         <p>Quy trình vô trùng nghiêm ngặt, đảm bảo an toàn cho bệnh nhân</p>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4" style="animation-delay: 0.7s;">
                     <div class="feature-box">
                         <i class="fas fa-hand-holding-usd text-primary fa-3x mb-3"></i>
                         <h4>Giá Cả Hợp Lý</h4>
