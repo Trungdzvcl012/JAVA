@@ -4,32 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giới Thiệu - Nha Khoa Sunshine</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <style>
-<<<<<<< HEAD
         :root {
-            --primary-color: #4fc3f7; 
-            --secondary-color: #e1f5fe; 
+            --primary-color: #4fc3f7;
+            --secondary-color: #e1f5fe;
             --accent-color: #0288d1;
             --text-color: #333;
             --light-color: #f8f9fa;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: var(--text-color);
             background-color: var(--light-color);
         }
-=======
->>>>>>> ff9cfd7a6327bb43514f26054792b47e0a9a6ba7
-        
+
+        /* NAVBAR */
         .navbar {
             background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-<<<<<<< HEAD
 
         .navbar-nav .nav-link {
             position: relative;
@@ -40,134 +38,83 @@
         .navbar-nav .nav-link::after {
             content: '';
             position: absolute;
-            bottom: -5px; 
+            bottom: -5px;
             left: 50%;
             width: 0;
             height: 2px;
-            background-color: white; 
+            background-color: white;
             transition: width 0.3s ease, left 0.3s ease;
         }
         .navbar-nav .nav-link:hover::after,
         .navbar-nav .nav-link.active::after {
-            width: 70%; 
+            width: 70%;
             left: 15%;
         }
-        
-=======
-        
+
         .btn-nav-secondary,
         .btn-nav-primary {
-            padding: 6px 16px; 
-            border-radius: 25px; 
+            padding: 6px 16px;
+            border-radius: 25px;
             font-weight: 600;
-            text-decoration: none;
+            text-decoration: none !important;
             transition: all 0.3s ease;
             display: inline-block;
-            white-space: nowrap; 
+            white-space: nowrap;
         }
 
->>>>>>> ff9cfd7a6327bb43514f26054792b47e0a9a6ba7
         .btn-nav-secondary {
             background-color: transparent;
             color: white;
             border: 1px solid white;
-<<<<<<< HEAD
-            padding: 6px 16px; 
-            border-radius: 25px; 
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-decoration: none !important;
         }
         .btn-nav-secondary:hover {
             background-color: white;
             color: var(--accent-color);
-=======
-        }
-        .btn-nav-secondary:hover {
-            background-color: white;
-            color: #0288d1; 
->>>>>>> ff9cfd7a6327bb43514f26054792b47e0a9a6ba7
         }
 
         .btn-nav-primary {
             background-color: white;
-<<<<<<< HEAD
             color: var(--accent-color);
             border: 1px solid white;
-            padding: 6px 16px; 
-            border-radius: 25px; 
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-decoration: none !important;
         }
         .btn-nav-primary:hover {
             background-color: #f0f0f0;
             border-color: #f0f0f0;
         }
 
-        .bg-primary {
-            background-color: var(--primary-color) !important; 
-=======
-            color: #0288d1; 
-            border: 1px solid white;
-        }
-        .btn-nav-primary:hover {
-            background-color: #f0f0f0;
-            border-color: #f0f0f0;
->>>>>>> ff9cfd7a6327bb43514f26054792b47e0a9a6ba7
-        }
-        .text-primary {
-<<<<<<< HEAD
-            color: var(--primary-color) !important;
-=======
-            color: #4fc3f7 !important;
-        }
-
-     
+        /* HERO SECTION */
         .hero-about-us {
-            background: linear-gradient(rgba(2, 136, 209, 0.85), rgba(1, 87, 155, 0.85)), url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
+            background: linear-gradient(rgba(2, 136, 209, 0.85), rgba(1, 87, 155, 0.85)), 
+                        url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1470&q=80');
             background-size: cover;
             background-position: center;
             color: white;
             padding: 100px 0;
->>>>>>> ff9cfd7a6327bb43514f26054792b47e0a9a6ba7
         }
-        
-       
+
+        /* FEATURE BOX */
         .feature-box {
             text-align: center;
             padding: 30px 20px;
             border-radius: 15px;
             background: white;
-<<<<<<< HEAD
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-bottom: 30px;
             height: 100%;
-            animation: fadeInUp 0.8s ease-out;
-            opacity: 0; 
-            animation-fill-mode: forwards;
-=======
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
-            height: 100%;
-            transition: transform 0.3s ease;
         }
         .feature-box:hover {
             transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
 
-      
         .section-image {
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             object-fit: cover;
-            height: 100%;
             width: 100%;
-            min-height: 350px; 
+            min-height: 350px;
         }
 
-        
         .gallery-img {
             border-radius: 12px;
             transition: transform 0.3s ease;
@@ -178,12 +125,6 @@
         }
         .gallery-img:hover {
             transform: scale(1.03);
->>>>>>> ff9cfd7a6327bb43514f26054792b47e0a9a6ba7
-        }
-
-        .feature-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
 
         footer {
@@ -198,49 +139,36 @@
             color: var(--primary-color) !important;
             transform: scale(1.1);
         }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
     </style>
 </head>
+
 <body>
+
+    <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <i class="fas fa-tooth me-2"></i>
-                Nha Khoa Sunshine
+                <i class="fas fa-tooth me-2"></i> Nha Khoa Sunshine
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
+
+            <div id="navbarNav" class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/}">Trang Chủ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" th:href="@{/gioi-thieu}">Giới Thiệu</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/dich-vu}">Dịch Vụ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/bac-si}">Bác Sĩ</a>
-                    </li>
-                    
-                    <li class="nav-item ms-lg-2 my-2 my-lg-0">
-                        <a class="btn-nav-secondary" th:href="@{/dang-nhap}">Đăng Nhập</a>
-                    </li>
-                    <li class="nav-item ms-lg-2">
-                        <a class="btn-nav-primary" th:href="@{/dang-ky}">Đăng Ký</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Trang Chủ</a></li>
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/gioi-thieu}">Giới Thiệu</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/dich-vu}">Dịch Vụ</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/bac-si}">Bác Sĩ</a></li>
+
+                    <li class="nav-item ms-lg-2"><a class="btn-nav-secondary" th:href="@{/dang-nhap}">Đăng Nhập</a></li>
+                    <li class="nav-item ms-lg-2"><a class="btn-nav-primary" th:href="@{/dang-ky}">Đăng Ký</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
+    <!-- HERO -->
     <section class="hero-about-us text-center">
         <div class="container">
             <h1 class="display-4 fw-bold mb-3">Về Chúng Tôi</h1>
@@ -248,23 +176,20 @@
         </div>
     </section>
 
+    <!-- STORY SECTION -->
     <section class="py-5">
-<<<<<<< HEAD
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6" style="animation-delay: 0.1s; opacity: 0; animation: fadeInUp 0.8s ease-out forwards;">
-                    <h2 class="fw-bold mb-4">Câu Chuyện Của Chúng Tôi</h2>
-                    <p class="mb-4">Nha Khoa Sunshine được thành lập với sứ mệnh mang đến dịch vụ chăm sóc răng miệng chất lượng cao, kết hợp giữa y học hiện đại và sự tận tâm trong chăm sóc bệnh nhân.</p>
-                    <p class="mb-4">Với hơn 10 năm kinh nghiệm trong lĩnh vực nha khoa, chúng tôi tự hào là địa chỉ tin cậy của hàng nghìn bệnh nhân.</p>
-=======
         <div class="container py-lg-4">
             <div class="row align-items-center gy-5">
-                <div class="col-lg-6 order-lg-1 order-2">
+
+                <div class="col-lg-6">
                     <h2 class="fw-bold mb-4 display-6 text-primary">Câu Chuyện Sunshine</h2>
-                    <p class="mb-4 lead text-muted">Nha Khoa Sunshine được thành lập với sứ mệnh mang đến dịch vụ chăm sóc răng miệng chất lượng quốc tế ngay tại Việt Nam.</p>
-                    <p class="mb-5">Khởi đầu từ tâm huyết của những bác sĩ nha khoa hàng đầu, chúng tôi hiểu rằng một nụ cười đẹp không chỉ là thẩm mỹ mà còn là sự tự tin. Với hơn 10 năm kinh nghiệm, Sunshine tự hào là ngôi nhà tin cậy của hàng nghìn nụ cười Việt.</p>
->>>>>>> ff9cfd7a6327bb43514f26054792b47e0a9a6ba7
-                    
+                    <p class="mb-4 lead text-muted">
+                        Nha Khoa Sunshine được thành lập với sứ mệnh mang đến dịch vụ chăm sóc răng miệng chất lượng quốc tế.
+                    </p>
+                    <p class="mb-5">
+                        Khởi đầu từ tâm huyết của những bác sĩ hàng đầu, chúng tôi hiểu rằng một nụ cười đẹp là chìa khóa của sự tự tin.
+                    </p>
+
                     <div class="row text-center">
                         <div class="col-4 border-end">
                             <h3 class="text-primary fw-bold display-5">5K+</h3>
@@ -280,192 +205,143 @@
                         </div>
                     </div>
                 </div>
-<<<<<<< HEAD
-                <div class="col-lg-6" style="animation-delay: 0.2s; opacity: 0; animation: fadeInUp 0.8s ease-out forwards;">
-                    <img th:src="@{/images/phongkham.jpg}" alt="Phòng khám" class="img-fluid rounded shadow">
-=======
-                <div class="col-lg-6 order-lg-2 order-1 mb-4 mb-lg-0">
-                    <img src="https://images.unsplash.com/photo-1629909615184-74f495363b67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1469&q=80" 
-                         alt="Bác sĩ tư vấn bệnh nhân" class="img-fluid section-image">
+
+                <div class="col-lg-6">
+                    <img src="https://images.unsplash.com/photo-1629909615184-74f495363b67?auto=format&fit=crop&w=1470&q=80"
+                         class="img-fluid section-image" alt="Bác sĩ tư vấn">
                 </div>
+
             </div>
         </div>
     </section>
 
+    <!-- MISSION & VISION -->
     <section class="py-5 bg-light">
         <div class="container py-lg-4">
-             <div class="row align-items-center mb-5 gx-lg-5">
-                <div class="col-lg-6 mb-4 mb-lg-0">
-                    <img src="https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Sứ mệnh nha khoa" class="img-fluid section-image shadow-sm">
+
+            <div class="row align-items-center mb-5 gx-lg-5">
+                <div class="col-lg-6 mb-4">
+                    <img src="https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?auto=format&fit=crop&w=1470&q=80"
+                         class="img-fluid section-image" alt="Sứ mệnh">
                 </div>
-                <div class="col-lg-6 ps-lg-5">
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="fas fa-bullseye text-primary fa-3x me-3"></i>
-                        <h3 class="fw-bold mb-0">Sứ Mệnh Của Chúng Tôi</h3>
-                    </div>
+                <div class="col-lg-6">
+                    <h3 class="fw-bold mb-3"><i class="fas fa-bullseye text-primary me-3"></i>Sứ Mệnh</h3>
                     <p class="lead text-muted">"Kiến tạo nụ cười khỏe đẹp bền vững."</p>
-                    <p>Chúng tôi cam kết mang đến trải nghiệm nha khoa nhẹ nhàng, không đau với công nghệ tiên tiến nhất. Sứ mệnh của Sunshine là giúp mọi khách hàng tự tin tỏa sáng với nụ cười của chính mình.</p>
+                    <p>Chúng tôi mang đến trải nghiệm nha khoa nhẹ nhàng với công nghệ tiên tiến nhất.</p>
                 </div>
             </div>
 
-            <div class="row align-items-center mt-5 gx-lg-5">
-                <div class="col-lg-6 order-lg-1 order-2 pe-lg-5">
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="fas fa-eye text-primary fa-3x me-3"></i>
-                        <h3 class="fw-bold mb-0">Tầm Nhìn Tương Lai</h3>
-                    </div>
-                    <p class="lead text-muted">"Trở thành hệ thống nha khoa chuẩn Quốc tế hàng đầu."</p>
-                    <p>Sunshine phấn đấu trở thành biểu tượng niềm tin hàng đầu Việt Nam về nha khoa thẩm mỹ và điều trị. Chúng tôi không ngừng đầu tư vào con người và công nghệ để đón đầu xu hướng nha khoa thế giới.</p>
+            <div class="row align-items-center gx-lg-5">
+                <div class="col-lg-6 order-lg-1 order-2">
+                    <h3 class="fw-bold mb-3"><i class="fas fa-eye text-primary me-3"></i>Tầm Nhìn</h3>
+                    <p class="lead text-muted">"Trở thành hệ thống nha khoa chuẩn quốc tế hàng đầu."</p>
                 </div>
-                <div class="col-lg-6 order-lg-2 order-1 mb-4 mb-lg-0">
-                    <img src="https://images.unsplash.com/photo-1609840114035-3c981b782dfe?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Tầm nhìn tương lai" class="img-fluid section-image shadow-sm">
+                <div class="col-lg-6 order-lg-2 order-1 mb-4">
+                    <img src="https://images.unsplash.com/photo-1609840114035-3c981b782dfe?auto=format&fit=crop&w=1470&q=80"
+                         class="img-fluid section-image" alt="Tầm nhìn">
                 </div>
             </div>
+
         </div>
     </section>
 
-     <section class="py-5">
-        <div class="container py-lg-4">
+    <!-- FACILITIES -->
+    <section class="py-5">
+        <div class="container">
             <div class="text-center mb-5">
                 <h5 class="text-primary text-uppercase fw-bold">Không Gian Hiện Đại</h5>
                 <h2 class="fw-bold display-6">Cơ Sở Vật Chất</h2>
                 <p class="text-muted mw-600 mx-auto">Trang thiết bị tối tân đảm bảo sự an toàn và hiệu quả điều trị.</p>
             </div>
+
             <div class="row g-4">
-                <div class="col-md-4">
-                    <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1453&q=80" alt="Phòng điều trị" class="img-fluid gallery-img">
-                </div>
-                <div class="col-md-4">
-                    <img src="https://images.unsplash.com/photo-1600210492493-0946911123ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80" alt="Sảnh chờ" class="img-fluid gallery-img">
-                </div>
-                <div class="col-md-4">
-                    <img src="https://images.unsplash.com/photo-1584362917165-526a968579e8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1528&q=80" alt="Thiết bị" class="img-fluid gallery-img">
->>>>>>> ff9cfd7a6327bb43514f26054792b47e0a9a6ba7
-                </div>
+                <div class="col-md-4"><img class="gallery-img" src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1453&q=80"></div>
+                <div class="col-md-4"><img class="gallery-img" src="https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=1374&q=80"></div>
+                <div class="col-md-4"><img class="gallery-img" src="https://images.unsplash.com/photo-1584362917165-526a968579e8?auto=format&fit=crop&w=1528&q=80"></div>
             </div>
         </div>
     </section>
 
+    <!-- CORE VALUES -->
     <section class="py-5 bg-light">
         <div class="container">
-<<<<<<< HEAD
-            <div class="row">
-                <div class="col-md-6 mb-4" style="animation-delay: 0.3s;">
-                    <div class="feature-box">
-                        <i class="fas fa-bullseye text-primary fa-3x mb-3"></i>
-                        <h4>Sứ Mệnh</h4>
-                        <p>Mang đến dịch vụ nha khoa chất lượng cao với công nghệ tiên tiến, giúp mọi người có được nụ cười khỏe mạnh và tự tin.</p>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-4" style="animation-delay: 0.4s;">
-                    <div class="feature-box">
-                        <i class="fas fa-eye text-primary fa-3x mb-3"></i>
-                        <h4>Tầm Nhìn</h4>
-                        <p>Trở thành phòng khám nha khoa hàng đầu, tiên phong trong ứng dụng công nghệ mới và đào tạo chuyên môn.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section class="py-5">
-        <div class="container">
-=======
->>>>>>> ff9cfd7a6327bb43514f26054792b47e0a9a6ba7
             <div class="text-center mb-5">
                 <h2 class="fw-bold display-6">Giá Trị Cốt Lõi</h2>
             </div>
+
             <div class="row">
-<<<<<<< HEAD
-                <div class="col-md-3 text-center mb-4" style="animation-delay: 0.5s;">
+                <div class="col-md-3 mb-4">
                     <div class="feature-box">
-                        <i class="fas fa-user-md text-primary fa-2x mb-3"></i>
-                        <h5>Chuyên Nghiệp</h5>
-                        <p class="small">Đội ngũ bác sĩ có chuyên môn cao và giàu kinh nghiệm</p>
-                    </div>
-                </div>
-                <div class="col-md-3 text-center mb-4" style="animation-delay: 0.6s;">
-                    <div class="feature-box">
-                        <i class="fas fa-heart text-primary fa-2x mb-3"></i>
-                        <h5>Tận Tâm</h5>
-                        <p class="small">Luôn đặt sức khỏe và sự hài lòng của bệnh nhân lên hàng đầu</p>
-                    </div>
-                </div>
-                <div class="col-md-3 text-center mb-4" style="animation-delay: 0.7s;">
-                    <div class="feature-box">
-                        <i class="fas fa-flask text-primary fa-2x mb-3"></i>
-                        <h5>Hiện Đại</h5>
-                        <p class="small">Ứng dụng công nghệ tiên tiến trong điều trị và chẩn đoán</p>
-                    </div>
-                </div>
-                <div class="col-md-3 text-center mb-4" style="animation-delay: 0.8s;">
-                    <div class="feature-box">
-                        <i class="fas fa-shield-alt text-primary fa-2x mb-3"></i>
-                        <h5>An Toàn</h5>
-                        <p class="small">Tuân thủ nghiêm ngặt quy trình vô trùng và an toàn y tế</p>
-=======
-                <div class="col-md-3 text-center mb-4">
-                    <div class="feature-box h-100 d-flex flex-column justify-content-center">
                         <i class="fas fa-user-md text-primary fa-3x mb-4"></i>
                         <h5 class="fw-bold">Chuyên Nghiệp</h5>
-                        <p class="text-muted mb-0">Đội ngũ bác sĩ chuyên môn cao, giàu kinh nghiệm.</p>
+                        <p class="text-muted">Đội ngũ bác sĩ giỏi, giàu kinh nghiệm.</p>
                     </div>
                 </div>
-                <div class="col-md-3 text-center mb-4">
-                    <div class="feature-box h-100 d-flex flex-column justify-content-center">
+
+                <div class="col-md-3 mb-4">
+                    <div class="feature-box">
                         <i class="fas fa-heart text-primary fa-3x mb-4"></i>
                         <h5 class="fw-bold">Tận Tâm</h5>
-                        <p class="text-muted mb-0">Chăm sóc khách hàng như người thân.</p>
+                        <p class="text-muted">Chăm sóc khách hàng như người thân.</p>
                     </div>
                 </div>
-                <div class="col-md-3 text-center mb-4">
-                    <div class="feature-box h-100 d-flex flex-column justify-content-center">
+
+                <div class="col-md-3 mb-4">
+                    <div class="feature-box">
                         <i class="fas fa-flask text-primary fa-3x mb-4"></i>
                         <h5 class="fw-bold">Hiện Đại</h5>
-                        <p class="text-muted mb-0">Công nghệ 4.0 trong chẩn đoán và điều trị.</p>
+                        <p class="text-muted">Công nghệ 4.0 trong điều trị.</p>
                     </div>
                 </div>
-                <div class="col-md-3 text-center mb-4">
-                    <div class="feature-box h-100 d-flex flex-column justify-content-center">
+
+                <div class="col-md-3 mb-4">
+                    <div class="feature-box">
                         <i class="fas fa-shield-alt text-primary fa-3x mb-4"></i>
                         <h5 class="fw-bold">An Toàn</h5>
-                        <p class="text-muted mb-0">Quy trình vô trùng chuẩn Bộ Y tế.</p>
->>>>>>> ff9cfd7a6327bb43514f26054792b47e0a9a6ba7
+                        <p class="text-muted">Quy trình vô trùng chuẩn y tế.</p>
                     </div>
                 </div>
             </div>
+
         </div>
     </section>
 
+    <!-- FOOTER -->
     <footer>
         <div class="container">
+
             <div class="row">
                 <div class="col-md-4">
                     <h5>Nha Khoa Sunshine</h5>
                     <p>Chăm sóc nụ cười Việt - Tự tin tỏa sáng</p>
                 </div>
+
                 <div class="col-md-4">
                     <h5>Liên Hệ</h5>
                     <p><i class="fas fa-map-marker-alt"></i> 123 Đường ABC, Quận 1, TP.HCM</p>
                     <p><i class="fas fa-phone"></i> (028) 1234 5678</p>
                     <p><i class="fas fa-envelope"></i> info@nhakhoasunshine.com</p>
                 </div>
+
                 <div class="col-md-4">
                     <h5>Theo Dõi Chúng Tôi</h5>
-                    <div class="social-links">
-                        <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-2x"></i></a>
-                        <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-2x"></i></a>
-                        <a href="#" class="text-white"><i class="fab fa-instagram fa-2x"></i></a>
-                    </div>
+                    <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-2x"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-2x"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-instagram fa-2x"></i></a>
                 </div>
             </div>
+
             <hr class="mt-4">
+
             <div class="text-center">
                 <p>&copy; 2024 Nha Khoa Sunshine. All rights reserved.</p>
             </div>
+
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
