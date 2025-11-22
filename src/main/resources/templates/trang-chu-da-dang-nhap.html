@@ -6,89 +6,249 @@
     <title>Trang Chủ - Nha Khoa Sunshine</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    
+    <style>
+        /* --- CSS ĐỒNG BỘ --- */
+        :root {
+            --primary-color: #4fc3f7;
+            --primary-dark: #0288d1;
+            --text-dark: #333;
+            --bg-light: #f8f9fa;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--text-dark); background-color: var(--bg-light); }
+
+        /* NAVBAR */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .nav-link.dropdown-toggle {
+            color: white !important;
+            font-weight: 600;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 30px;
+            transition: all 0.3s;
+        }
+        .nav-link.dropdown-toggle:hover {
+            background: white;
+            color: var(--primary-dark) !important;
+        }
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            margin-top: 10px;
+        }
+        .dropdown-item { padding: 10px 20px; font-weight: 500; }
+        .dropdown-item:hover { background-color: #e1f5fe; color: var(--primary-dark); }
+
+        /* HERO SECTION (ĐÃ SỬA) */
+        .hero-dashboard {
+            background: linear-gradient(rgba(2, 136, 209, 0.85), rgba(1, 87, 155, 0.9)), url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            /* [SỬA] Điều chỉnh padding để banner gọn hơn */
+            padding: 80px 0 80px; 
+            position: relative;
+            border-bottom-left-radius: 0; /* Bỏ bo góc dưới để nối liền mạch hơn nếu muốn, hoặc giữ nguyên */
+            border-bottom-right-radius: 0;
+        }
+
+        /* DASHBOARD CARDS (ĐÃ SỬA) */
+        .dashboard-cards-container {
+            /* [SỬA] Thay margin âm bằng margin dương để tạo khoảng cách an toàn */
+            margin-top: 30px; 
+        }
+        .action-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* Giảm bóng một chút cho nhẹ nhàng */
+            transition: transform 0.3s;
+            height: 100%;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .action-card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.12); }
+        
+        .action-icon {
+            width: 70px; height: 70px;
+            background: #e1f5fe; color: var(--primary-dark);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; margin: 0 auto 20px;
+        }
+
+        /* SERVICE CARD */
+        .service-card {
+            border: none; border-radius: 20px; background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: all 0.3s ease;
+            height: 100%; overflow: hidden; display: flex; flex-direction: column;
+        }
+        .service-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(2, 136, 209, 0.15); }
+        .card-img-wrapper { height: 200px; overflow: hidden; position: relative; }
+        .card-img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .service-card:hover .card-img-wrapper img { transform: scale(1.1); }
+        .time-badge {
+            position: absolute; top: 15px; right: 15px;
+            background: rgba(255, 255, 255, 0.95); color: var(--primary-dark);
+            padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;
+        }
+        .price-tag { background: #f8f9fa; padding: 10px; border-radius: 10px; text-align: center; margin-top: auto; }
+        .price-current { color: var(--primary-dark); font-weight: 800; font-size: 1.2rem; }
+        .btn-service {
+            background: white; color: var(--primary-dark); border: 2px solid var(--primary-dark);
+            border-radius: 50px; font-weight: 600; padding: 8px; transition: all 0.3s;
+        }
+        .btn-service:hover { background: var(--primary-dark); color: white; }
+
+        /* FOOTER */
+        footer { background: linear-gradient(135deg, var(--primary-dark), #01579b); color: white; padding: 60px 0 20px; }
+        .social-links a { 
+            width: 40px; height: 40px; line-height: 40px; border-radius: 50%; background: rgba(255,255,255,0.1);
+            display: inline-block; text-align: center; color: white; margin-right: 10px; transition: 0.3s;
+        }
+        .social-links a:hover { background: white; color: var(--primary-dark); }
+
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
+
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="/trang-chu">
-                <i class="fas fa-tooth me-2"></i>
-                Nha Khoa Sunshine
+                <i class="fas fa-tooth me-2"></i> Nha Khoa Sunshine
             </a>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link active" href="/trang-chu">Trang Chủ</a>
-                <a class="nav-link" href="/dich-vu">Dịch Vụ</a>
-                <a class="nav-link" href="/bac-si">Bác Sĩ</a>
-                <a class="nav-link" href="/lich-hen/cua-toi">Lịch Hẹn</a>
-                <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-user me-1"></i>
-                        <span th:text="${nguoiDung.hoTen}"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Hồ Sơ</a></li>
-                        <li><a class="dropdown-item" href="/lich-hen/cua-toi">Lịch Hẹn Của Tôi</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <form th:action="@{/dang-xuat}" method="post">
-                                <button type="submit" class="dropdown-item">Đăng Xuất</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link active" href="/trang-chu">Trang Chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/dich-vu">Dịch Vụ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/bac-si">Bác Sĩ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/lich-hen/cua-toi">Lịch Hẹn</a></li>
+                    
+                    <li class="nav-item dropdown ms-lg-3">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <span th:text="${nguoiDung.hoTen}">Người Dùng</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end animate__animated animate__fadeIn">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-id-card me-2 text-muted"></i> Hồ Sơ Của Tôi</a></li>
+                            <li><a class="dropdown-item" href="/lich-hen/cua-toi"><i class="fas fa-calendar-alt me-2 text-muted"></i> Lịch Hẹn</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/dang-xuat}" method="post" class="d-inline">
+                                    <button type="submit" class="dropdown-item text-danger">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Đăng Xuất
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Welcome Section -->
-    <section class="py-5 bg-primary text-white">
+    <section class="hero-dashboard text-center">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <h1 class="display-5 fw-bold">Chào mừng, <span th:text="${nguoiDung.hoTen}"></span>!</h1>
-                    <p class="lead">Chúng tôi rất vui được chăm sóc nụ cười của bạn</p>
+            <h1 class="display-4 fw-bold mb-3">Xin chào, <span th:text="${nguoiDung.hoTen}">Khách hàng</span>!</h1>
+            <p class="lead fs-5 opacity-75 mb-0">Cảm ơn bạn đã tin tưởng lựa chọn Nha Khoa Sunshine.</p>
+            <p class="opacity-75">Chúng tôi sẵn sàng chăm sóc nụ cười của bạn ngay hôm nay.</p>
+        </div>
+    </section>
+
+    <section class="dashboard-cards-container pb-5">
+        <div class="container">
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-4">
+                    <div class="action-card">
+                        <div class="action-icon"><i class="fas fa-calendar-plus"></i></div>
+                        <h4 class="fw-bold">Đặt Lịch Mới</h4>
+                        <p class="text-muted small">Đặt hẹn khám nhanh chóng với bác sĩ chuyên khoa.</p>
+                        <a href="/lich-hen/dat-lich" class="btn btn-outline-primary rounded-pill px-4 mt-2">Đặt Ngay</a>
+                    </div>
                 </div>
-                <div class="col-md-4 text-end">
-                    <a href="/lich-hen/dat-lich" class="btn btn-light btn-lg">
-                        <i class="fas fa-calendar-plus me-2"></i>Đặt Lịch Mới
+                <div class="col-md-4">
+                    <div class="action-card">
+                        <div class="action-icon"><i class="fas fa-history"></i></div>
+                        <h4 class="fw-bold">Lịch Hẹn Của Tôi</h4>
+                        <p class="text-muted small">Xem lại lịch sử khám và các cuộc hẹn sắp tới.</p>
+                        <a href="/lich-hen/cua-toi" class="btn btn-outline-primary rounded-pill px-4 mt-2">Xem Chi Tiết</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="action-card">
+                        <div class="action-icon"><i class="fas fa-user-edit"></i></div>
+                        <h4 class="fw-bold">Hồ Sơ Cá Nhân</h4>
+                        <p class="text-muted small">Cập nhật thông tin liên hệ và hồ sơ bệnh án.</p>
+                        <a href="#" class="btn btn-outline-primary rounded-pill px-4 mt-2">Cập Nhật</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold text-primary"><i class="fas fa-bell me-2"></i>Lịch Hẹn Sắp Tới</h3>
+            </div>
+            
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-body p-5 text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-calendar-day text-black-50 fa-4x"></i>
+                    </div>
+                    <h5 class="text-muted fw-bold">Bạn chưa có lịch hẹn nào sắp tới</h5>
+                    <p class="text-muted mb-4">Hãy chăm sóc sức khỏe răng miệng định kỳ 6 tháng/lần.</p>
+                    <a href="/lich-hen/dat-lich" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                        <i class="fas fa-plus me-2"></i> Đặt Lịch Khám
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Quick Actions -->
     <section class="py-5">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 text-center">
-                        <div class="card-body">
-                            <i class="fas fa-calendar-check text-primary fa-3x mb-3"></i>
-                            <h5>Đặt Lịch Khám</h5>
-                            <p class="text-muted">Đặt lịch khám nhanh chóng với bác sĩ</p>
-                            <a href="/lich-hen/dat-lich" class="btn btn-primary">Đặt Lịch Ngay</a>
+            <div class="text-center mb-5">
+                <h5 class="text-primary fw-bold text-uppercase">Dịch Vụ Đề Xuất</h5>
+                <h2 class="fw-bold">Giải Pháp Cho Nụ Cười Của Bạn</h2>
+            </div>
+
+            <div class="row g-4">
+                <div th:each="dichVu : ${dichVus}" class="col-lg-4 col-md-6">
+                    <div class="service-card">
+                        <div class="card-img-wrapper" 
+                             th:with="name=${dichVu.tenDichVu}, imgUrl=${
+                                (#strings.containsIgnoreCase(name, 'niềng') || #strings.containsIgnoreCase(name, 'chỉnh nha')) ? 'https://images.unsplash.com/photo-1599839519636-3c182f4c3b58?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' : 
+                                (#strings.containsIgnoreCase(name, 'implant') || #strings.containsIgnoreCase(name, 'trồng')) ? 'https://images.unsplash.com/photo-1570303984880-07746315da58?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' : 
+                                (#strings.containsIgnoreCase(name, 'trắng')) ? 'https://images.unsplash.com/photo-1598256989800-fe5f95da9787?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' : 
+                                (#strings.containsIgnoreCase(name, 'sứ')) ? 'https://images.unsplash.com/photo-1609840112755-1e2d8003d71a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' : 
+                                (#strings.containsIgnoreCase(name, 'nhổ')) ? 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' : 
+                                (#strings.containsIgnoreCase(name, 'trám')) ? 'https://images.unsplash.com/photo-1600170311833-c2cf5280ce49?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' : 
+                                (#strings.containsIgnoreCase(name, 'trẻ')) ? 'https://images.unsplash.com/photo-1606265752439-1f18756aa5fc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' : 
+                                'https://images.unsplash.com/photo-1629909613654-28e377c37b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                             }">
+                            <img th:src="${imgUrl}" class="card-img-top" th:alt="${dichVu.tenDichVu}">
+                            <div class="time-badge"><i class="far fa-clock me-1"></i> <span th:text="${dichVu.thoiGianDuKien} + ' phút'"></span></div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 text-center">
-                        <div class="card-body">
-                            <i class="fas fa-history text-primary fa-3x mb-3"></i>
-                            <h5>Lịch Sử Khám</h5>
-                            <p class="text-muted">Xem lịch sử khám và hồ sơ bệnh án</p>
-                            <a href="/lich-hen/cua-toi" class="btn btn-outline-primary">Xem Lịch Sử</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 text-center">
-                        <div class="card-body">
-                            <i class="fas fa-user-edit text-primary fa-3x mb-3"></i>
-                            <h5>Cập Nhật Hồ Sơ</h5>
-                            <p class="text-muted">Cập nhật thông tin cá nhân của bạn</p>
-                            <a href="#" class="btn btn-outline-primary">Chỉnh Sửa</a>
+
+                        <div class="card-body p-4 d-flex flex-column">
+                            <h5 class="fw-bold mb-2" th:text="${dichVu.tenDichVu}">Tên Dịch Vụ</h5>
+                            <p class="text-muted small mb-3 flex-grow-1" th:text="${#strings.abbreviate(dichVu.moTa, 80)}">Mô tả...</p>
+                            
+                            <div class="price-tag mb-3">
+                                <span class="price-current" th:text="${#numbers.formatCurrency(dichVu.giaDichVu)}"></span>
+                            </div>
+                            <a th:href="@{/lich-hen/dat-lich(dichvu=${dichVu.id})}" class="btn btn-service w-100 text-center">Đặt Lịch Ngay</a>
                         </div>
                     </div>
                 </div>
@@ -96,49 +256,41 @@
         </div>
     </section>
 
-    <!-- Upcoming Appointments -->
-    <section class="py-5 bg-light">
+    <footer>
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="fw-bold">Lịch Hẹn Sắp Tới</h3>
-                <a href="/lich-hen/cua-toi" class="btn btn-outline-primary">Xem Tất Cả</a>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <div class="text-center py-4">
-                        <i class="fas fa-calendar-day text-muted fa-3x mb-3"></i>
-                        <h5 class="text-muted">Chưa có lịch hẹn nào</h5>
-                        <p class="text-muted">Hãy đặt lịch khám đầu tiên của bạn</p>
-                        <a href="/lich-hen/dat-lich" class="btn btn-primary">Đặt Lịch Ngay</a>
+            <div class="row gy-4">
+                <div class="col-lg-4">
+                    <h4 class="fw-bold mb-3"><i class="fas fa-tooth me-2"></i>Sunshine</h4>
+                    <p class="opacity-75">Hệ thống nha khoa tiêu chuẩn quốc tế, mang lại nụ cười khỏe đẹp và sự tự tin cho hàng triệu khách hàng Việt Nam.</p>
+                    <div class="social-links mt-4">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services Preview -->
-    <section class="py-5">
-        <div class="container">
-            <h3 class="fw-bold text-center mb-5">Dịch Vụ Nổi Bật</h3>
-            <div class="row">
-                <div th:each="dichVu : ${dichVus}" class="col-md-4 mb-4">
-                    <div class="service-card h-100">
-                        <div class="card-body text-center p-4">
-                            <div class="service-icon mb-3">
-                                <i class="fas fa-tooth text-primary fa-2x"></i>
-                            </div>
-                            <h5 th:text="${dichVu.tenDichVu}"></h5>
-                            <p class="text-muted" th:text="${dichVu.moTa}"></p>
-                            <div class="price mb-3">
-                                <span class="h5 text-primary" th:text="${#numbers.formatCurrency(dichVu.giaDichVu)}"></span>
-                            </div>
-                            <a href="/lich-hen/dat-lich" class="btn btn-outline-primary">Đặt Lịch</a>
-                        </div>
-                    </div>
+                <div class="col-lg-4">
+                    <h5 class="fw-bold mb-3">Liên Hệ</h5>
+                    <ul class="list-unstyled opacity-75">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Đường Nguyễn Văn Cừ, Q.5, TP.HCM</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i> Hotline: 1900 1234</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> tuvan@nhakhoasunshine.com</li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5 class="fw-bold mb-3">Hỗ Trợ</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none opacity-75 hover-white">Chính sách bảo mật</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none opacity-75 hover-white">Điều khoản sử dụng</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none opacity-75 hover-white">Câu hỏi thường gặp</a></li>
+                    </ul>
                 </div>
             </div>
+            <hr class="my-4 opacity-25">
+            <div class="text-center opacity-75 small">
+                &copy; 2024 Nha Khoa Sunshine. All rights reserved.
+            </div>
         </div>
-    </section>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
