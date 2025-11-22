@@ -1,9 +1,9 @@
 package com.nhakhoa.service;
 
-import org.springframework.stereotype.Service; // <-- Dòng cần thêm
+import org.springframework.stereotype.Service; 
 import com.nhakhoa.model.HoaDon;
 
-@Service // <-- DÒNG NÀY LÀ BẮT BUỘC ĐỂ KHẮC PHỤC LỖI
+@Service
 public class hoaDonService {
 
     public HoaDon findById(Long id) {
