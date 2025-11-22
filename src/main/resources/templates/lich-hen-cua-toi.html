@@ -10,10 +10,8 @@
     <style th:replace="~{fragments/css :: style}"></style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav th:replace="~{fragments/header-logged-in :: header}"></nav>
 
-    <!-- Success/Error Messages -->
     <div th:if="${param.success} or ${param.error}" class="container mt-3">
         <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="fas fa-check-circle me-2"></i>
@@ -30,7 +28,6 @@
         </div>
     </div>
 
-    <!-- My Appointments Section -->
     <section class="py-5" style="min-height: 80vh;">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -40,7 +37,6 @@
                 </a>
             </div>
 
-            <!-- Statistics Cards -->
             <div class="row mb-4" th:if="${tongLichHen > 0}">
                 <div class="col-md-3 mb-3">
                     <div class="card stats-card">
@@ -76,7 +72,6 @@
                 </div>
             </div>
 
-            <!-- Filter Tabs -->
             <ul class="nav nav-tabs mb-4" id="appointmentTabs" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button">
@@ -100,9 +95,7 @@
                 </li>
             </ul>
 
-            <!-- Tab Content -->
             <div class="tab-content" id="appointmentTabsContent">
-                <!-- All Appointments -->
                 <div class="tab-pane fade show active" id="all" role="tabpanel">
                     <div th:if="${not #lists.isEmpty(lichHens)}">
                         <div th:each="lichHen : ${lichHens}" class="card service-card mb-4">
@@ -111,7 +104,6 @@
                                     <div class="col-md-8">
                                         <div class="d-flex justify-content-between align-items-start mb-2">
                                             <h5 th:text="${lichHen.dichVu?.tenDichVu} ?: 'Không xác định'">Dịch vụ</h5>
-                                            <!-- SỬA LẠI DÒNG NÀY: Sử dụng th:with để xử lý conditional -->
                                             <span th:with="badgeClass=${lichHen.trangThai == 'DA_XAC_NHAN'} ? 'badge-confirmed' : 
                                                           (${lichHen.trangThai == 'CHO_XAC_NHAN'} ? 'badge-waiting' : 
                                                           (${lichHen.trangThai == 'DA_HOAN_THANH'} ? 'badge-completed' : 'badge-cancelled'))"
@@ -163,7 +155,6 @@
                     </div>
                 </div>
 
-                <!-- Waiting Appointments -->
                 <div class="tab-pane fade" id="waiting" role="tabpanel">
                     <div th:if="${not #lists.isEmpty(lichHens)}">
                         <div th:each="lichHen : ${lichHens}" th:if="${lichHen.trangThai == 'CHO_XAC_NHAN'}" class="card service-card mb-4">
@@ -214,7 +205,6 @@
                     </div>
                 </div>
 
-                <!-- Confirmed Appointments -->
                 <div class="tab-pane fade" id="confirmed" role="tabpanel">
                     <div th:if="${not #lists.isEmpty(lichHens)}">
                         <div th:each="lichHen : ${lichHens}" th:if="${lichHen.trangThai == 'DA_XAC_NHAN'}" class="card service-card mb-4">
@@ -265,7 +255,6 @@
                     </div>
                 </div>
 
-                <!-- Completed Appointments -->
                 <div class="tab-pane fade" id="completed" role="tabpanel">
                     <div th:if="${not #lists.isEmpty(lichHens)}">
                         <div th:each="lichHen : ${lichHens}" th:if="${lichHen.trangThai == 'DA_HOAN_THANH'}" class="card service-card mb-4">
@@ -310,7 +299,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer th:replace="~{fragments/footer :: footer}"></footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
