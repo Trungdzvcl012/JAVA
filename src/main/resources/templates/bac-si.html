@@ -217,13 +217,11 @@
     <section class="py-5">
         <div class="container">
             <div class="row">
-                <!-- ÁP DỤNG ĐỘ TRỄ ANIMATION CHO THẺ BÁC SĨ -->
                 <div th:each="bacSi, stat : ${bacSis}" 
                      class="col-lg-4 col-md-6 mb-4"
                      th:style="'animation-delay:' + (0.1 * ${stat.index}) + 's;'">
                     <div class="doctor-card h-100">
                         <div class="text-center">
-                            <!-- SỬ DỤNG LOGIC ẢNH AN TOÀN -->
                             <img th:with="imagePath=${bacSi.anhDaiDien != null and bacSi.anhDaiDien != '' ? '/images/' + bacSi.anhDaiDien : '/images/doctor-default.jpg'}"
                                  th:src="@{${imagePath}}" 
                                  th:alt="${bacSi.hoTen}" class="doctor-img mb-3">
@@ -263,7 +261,6 @@
                 <h2 class="fw-bold">Tại Sao Chọn Chúng Tôi?</h2>
             </div>
             <div class="row">
-                <!-- ÁP DỤNG ĐỘ TRỄ ANIMATION CHO FEATURE BOX -->
                 <div class="col-md-4 text-center mb-4" style="animation-delay: 0.1s;">
                     <div class="feature-box">
                         <i class="fas fa-graduation-cap text-primary fa-3x mb-3"></i>
@@ -289,7 +286,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="row">
