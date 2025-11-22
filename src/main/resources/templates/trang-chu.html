@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nha Khoa Sunshine - Nụ Cười Tỏa Sáng</title>
+    <title>Nha Khoa Sunshine - Trang Chủ</title>
+
+    <!-- Bootstrap & FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
+    <!-- ======================== CSS TÙY CHỈNH ======================== -->
     <style>
-        
         :root {
             --primary-color: #4fc3f7;
             --secondary-color: #e1f5fe;
@@ -17,402 +19,352 @@
             --light-color: #f8f9fa;
         }
 
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--text-dark); }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: var(--light-color);
+            color: var(--text-color);
+        }
 
-        
+        /* ---------------- NAVBAR ---------------- */
         .navbar {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .btn-nav-secondary, .btn-nav-primary {
-            padding: 8px 20px; border-radius: 25px; font-weight: 600;
-            text-decoration: none; transition: all 0.3s ease;
-            display: inline-block; white-space: nowrap; font-size: 0.9rem;
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
         }
-        .btn-nav-secondary { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.5); }
-        .btn-nav-secondary:hover { background: white; color: var(--primary-dark); }
-        .btn-nav-primary { background: white; color: var(--primary-dark); border: 1px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .btn-nav-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.2); }
 
-       
-        .hero-home {
-            background: linear-gradient(rgba(2, 136, 209, 0.8), rgba(1, 87, 155, 0.8)), url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
+        .navbar-nav .nav-link {
+            color: white !important;
+            position: relative;
+            font-weight: 500;
+        }
+
+        /* Hiệu ứng gạch chân */
+        .navbar-nav .nav-link::after {
+            content: "";
+            position: absolute;
+            bottom: -3px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: 0.3s;
+        }
+        .navbar-nav .nav-link:hover::after,
+        .navbar-nav .nav-link.active::after {
+            width: 70%;
+            left: 15%;
+        }
+
+        /* Nút nav */
+        .btn-nav-secondary, .btn-nav-primary {
+            padding: 6px 18px;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-nav-secondary {
+            border: 1px solid white;
+            color: white;
+        }
+        .btn-nav-secondary:hover {
+            background: white;
+            color: var(--accent-color);
+        }
+
+        .btn-nav-primary {
+            background: white;
+            color: var(--accent-color);
+        }
+        .btn-nav-primary:hover {
+            background: #f1f1f1;
+        }
+
+        /* ---------------- HERO SECTION ---------------- */
+        .hero-section {
+            background: linear-gradient(rgba(79,195,247,0.7), rgba(2,136,209,0.7)),
+                url('/images/hero-bg.jpg');
             background-size: cover;
             background-position: center;
+            padding: 120px 0;
+            text-align: center;
             color: white;
-            padding: 150px 0 100px;
-            position: relative;
-            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%); /* Tạo đường chéo nghệ thuật */
         }
 
-       
+        .hero-section h1,
+        .hero-section p {
+            animation: fadeInDown 1s ease-out;
+        }
+
+        /* ---------------- CARD DỊCH VỤ ---------------- */
         .service-card {
             border: none;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            margin-bottom: 30px;
-        }
-        
-        .service-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .service-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--secondary-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-        }
-        
-        .doctor-card {
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: 0.3s ease;
+            padding: 25px 20px;
             text-align: center;
-            padding: 20px;
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .service-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.18);
+        }
+
+        .service-icon {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+            transition: 0.3s;
+        }
+        .service-card:hover .service-icon {
+            transform: scale(1.1);
+        }
+
+        /* ---------------- CARD BÁC SĨ ---------------- */
+        .doctor-card {
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            padding: 25px;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: 0.3s ease;
+            text-align: center;
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
         }
-        
         .doctor-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-6px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.18);
         }
-        
         .doctor-img {
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto 15px;
             border: 5px solid var(--secondary-color);
+            object-fit: cover;
+            transition: 0.3s;
         }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            border: none;
-            border-radius: 25px;
-            padding: 10px 30px;
-            font-weight: 600;
+        .doctor-card:hover .doctor-img {
+            border-color: var(--primary-color);
         }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
+
+        /* ---------------- FEATURE BOX ---------------- */
         .feature-box {
-            text-align: center;
+            background: white;
             padding: 30px 20px;
             border-radius: 15px;
-            background: white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: 0.3s;
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
         }
-        
+        .feature-box:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        /* ---------------- ANIMATION ---------------- */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ---------------- FOOTER ---------------- */
         footer {
             background: linear-gradient(135deg, var(--accent-color), #01579b);
             color: white;
             padding: 50px 0 20px;
         }
-
-        /* === CSS MỚI CHO BUTTON TRÊN NAVBAR === */
-        .btn-nav-secondary,
-        .btn-nav-primary {
-            padding: 6px 16px; /* Kích thước nhỏ gọn hơn */
-            border-radius: 25px; /* Bo góc giống .btn-primary */
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-block;
+        footer a {
+            color: white !important;
+            transition: 0.3s;
         }
-
-        /* Nút "Đăng Nhập" (Viền) */
-        .btn-nav-secondary {
-            background-color: transparent;
-            color: white;
-            border: 1px solid white;
+        footer a:hover {
+            color: var(--primary-color) !important;
         }
-
-        .btn-nav-secondary:hover {
-            background-color: white;
-            color: var(--accent-color); /* Sử dụng màu --accent-color */
-        }
-
-        /* Nút "Đăng Ký" (Nền đặc) */
-        .btn-nav-primary {
-            background-color: white;
-            color: var(--accent-color); /* Sử dụng màu --accent-color */
-            border: 1px solid white;
-        }
-
-        .btn-nav-primary:hover {
-            background-color: #f0f0f0;
-            border-color: #f0f0f0;
-        }
-        /* === KẾT THÚC CSS MỚI === */
-
     </style>
 </head>
+
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <i class="fas fa-tooth me-2"></i> Nha Khoa Sunshine
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link active" href="/">Trang Chủ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/dich-vu">Dịch Vụ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/bac-si">Bác Sĩ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/gioi-thieu">Giới Thiệu</a></li>
-                    <li class="nav-item ms-lg-2 my-2 my-lg-0"><a class="btn-nav-secondary" href="/dang-nhap">Đăng Nhập</a></li>
-                    <li class="nav-item ms-lg-2"><a class="btn-nav-primary" href="/dang-ky">Đăng Ký</a></li>
-                </ul>
-            </div>
+<!-- ======================== NAVBAR ======================== -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-tooth me-2"></i> Nha Khoa Sunshine
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navbarNav" class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link active" href="/">Trang Chủ</a></li>
+                <li class="nav-item"><a class="nav-link" href="/gioi-thieu">Giới Thiệu</a></li>
+                <li class="nav-item"><a class="nav-link" href="/dich-vu">Dịch Vụ</a></li>
+                <li class="nav-item"><a class="nav-link" href="/bac-si">Bác Sĩ</a></li>
+
+                <li class="nav-item ms-lg-2 my-2 my-lg-0">
+                    <a class="btn-nav-secondary" href="/dang-nhap">Đăng Nhập</a>
+                </li>
+                <li class="nav-item ms-lg-2">
+                    <a class="btn-nav-primary" href="/dang-ky">Đăng Ký</a>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <section class="hero-home text-center">
-        <div class="container">
-            <h1 class="display-4 fw-bold mb-4">Nụ Cười Tỏa Sáng - Tự Tin Tỏa Sáng</h1>
-            <p class="lead mb-4">Chăm sóc nụ cười của bạn với đội ngũ bác sĩ chuyên nghiệp và công nghệ hiện đại</p>
-            <a href="/dang-ky" class="btn btn-light btn-lg">Đặt Lịch Ngay</a>
+<!-- ======================== HERO ======================== -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-4">Nụ Cười Tỏa Sáng – Tự Tin Tỏa Sáng</h1>
+        <p class="lead mb-4">Công nghệ hiện đại & đội ngũ bác sĩ chuyên môn cao</p>
+        <a href="/dang-ky" class="btn btn-light btn-lg px-4">Đặt Lịch Ngay</a>
+    </div>
+</section>
+
+<!-- ======================== DỊCH VỤ ======================== -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Dịch Vụ Nổi Bật</h2>
+            <p class="text-muted">Chăm sóc răng miệng toàn diện, hiện đại</p>
         </div>
-    </section>
 
-    <section class="py-5">
-        <div class="container">
-            <div class="row text-center g-4">
-                <div class="col-md-3 col-6">
-                    <div class="stat-item">
-                        <h3>10+</h3>
-                        <p class="text-muted fw-bold">Năm Kinh Nghiệm</p>
+        <div class="row">
+            <div th:each="dichVu, stat : ${dichVus}"
+                 class="col-md-4 mb-4"
+                 th:style="'animation-delay:' + (0.1 * ${stat.index} + 0.2) + 's;'">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-tooth fa-2x text-primary"></i>
                     </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="stat-item">
-                        <h3>5K+</h3>
-                        <p class="text-muted fw-bold">Khách Hàng Hài Lòng</p>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="stat-item">
-                        <h3>20+</h3>
-                        <p class="text-muted fw-bold">Bác Sĩ Chuyên Khoa</p>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="stat-item">
-                        <h3>100%</h3>
-                        <p class="text-muted fw-bold">Thiết Bị Vô Trùng</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h5 class="text-primary fw-bold text-uppercase">Dịch Vụ Của Chúng Tôi</h5>
-                <h2 class="fw-bold display-6">Giải Pháp Nha Khoa Toàn Diện</h2>
-            </div>
-            <div class="row">
-                <div th:each="dichVu : ${dichVus}" class="col-md-4">
-                    <div class="service-card">
-                        <div class="card-img-wrapper" 
-                             th:with="name=${dichVu.tenDichVu}, imgUrl=${
-                                (#strings.containsIgnoreCase(name, 'niềng') || #strings.containsIgnoreCase(name, 'chỉnh nha')) ? 'https://images.unsplash.com/photo-1599839519636-3c182f4c3b58?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' : 
-                                (#strings.containsIgnoreCase(name, 'implant') || #strings.containsIgnoreCase(name, 'trồng')) ? 'https://images.unsplash.com/photo-1570303984880-07746315da58?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' : 
-                                (#strings.containsIgnoreCase(name, 'trắng')) ? 'https://images.unsplash.com/photo-1598256989800-fe5f95da9787?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' : 
-                                (#strings.containsIgnoreCase(name, 'sứ')) ? 'https://images.unsplash.com/photo-1609840112755-1e2d8003d71a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' : 
-                                (#strings.containsIgnoreCase(name, 'nhổ')) ? 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' : 
-                                (#strings.containsIgnoreCase(name, 'trám')) ? 'https://images.unsplash.com/photo-1600170311833-c2cf5280ce49?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' : 
-                                (#strings.containsIgnoreCase(name, 'trẻ')) ? 'https://images.unsplash.com/photo-1606265752439-1f18756aa5fc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' : 
-                                'https://images.unsplash.com/photo-1629909613654-28e377c37b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-                             }">
-                            <img th:src="${imgUrl}" class="card-img-top" th:alt="${dichVu.tenDichVu}">
-                            <div class="time-badge"><i class="far fa-clock me-1"></i> <span th:text="${dichVu.thoiGianDuKien} + ' phút'"></span></div>
-                        </div>
+                    <h5 th:text="${dichVu.tenDichVu}">Tên dịch vụ</h5>
+                    <p class="text-muted" th:text="${dichVu.moTa}">Mô tả dịch vụ</p>
 
-                        <div class="card-body p-4 d-flex flex-column">
-                            <h5 class="fw-bold mb-2" th:text="${dichVu.tenDichVu}">Tên Dịch Vụ</h5>
-                            <p class="text-muted small mb-3 flex-grow-1" th:text="${#strings.abbreviate(dichVu.moTa, 80)}">Mô tả...</p>
-                            
-                            <div class="price-tag mb-3">
-                                <span class="price-current" th:text="${#numbers.formatCurrency(dichVu.giaDichVu)}"></span>
-                            </div>
-                            <a th:href="@{/dang-ky(dichvu=${dichVu.id})}" class="btn btn-service w-100 text-center">Đặt Hẹn Ngay</a>
-                        </div>
+                    <div class="price mb-3">
+                        <span class="h5 text-primary" th:text="${#numbers.formatCurrency(dichVu.giaDichVu)}">Giá</span>
                     </div>
-                </div>
-            </div>
-            
-            <div class="text-center mt-5">
-                <a href="/dich-vu" class="btn btn-outline-primary rounded-pill px-5">Xem Tất Cả Dịch Vụ <i class="fas fa-arrow-right ms-2"></i></a>
-            </div>
-        </div>
-    </section>
 
-    <section class="py-5">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-5 mb-4 mb-lg-0">
-                    
-
-[Image of modern dental office waiting room]
-
-                    <img src="https://images.unsplash.com/photo-1600210492493-0946911123ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80" 
-                         alt="Phòng khám hiện đại" class="img-fluid rounded-3 shadow-lg">
-                </div>
-                <div class="col-lg-7 ps-lg-5">
-                    <h5 class="text-primary fw-bold text-uppercase">Tại Sao Chọn Sunshine?</h5>
-                    <h2 class="fw-bold mb-4">Chăm Sóc Tận Tâm, Chất Lượng Hàng Đầu</h2>
-                    
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <i class="fas fa-user-md text-primary fa-2x"></i>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h5 class="fw-bold">Đội Ngũ Chuyên Gia</h5>
-                                    <p class="text-muted small">100% Bác sĩ tốt nghiệp Đại học Y chính quy.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <i class="fas fa-shield-alt text-primary fa-2x"></i>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h5 class="fw-bold">An Toàn Tuyệt Đối</h5>
-                                    <p class="text-muted small">Quy trình vô trùng khép kín chuẩn Bộ Y Tế.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <i class="fas fa-laptop-medical text-primary fa-2x"></i>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h5 class="fw-bold">Công Nghệ 4.0</h5>
-                                    <p class="text-muted small">Máy CT Conebeam, Scan 3D Trios hiện đại.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <i class="fas fa-comments-dollar text-primary fa-2x"></i>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h5 class="fw-bold">Chi Phí Minh Bạch</h5>
-                                    <p class="text-muted small">Tư vấn rõ ràng, không phát sinh chi phí.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <a href="/dang-ky" class="btn btn-outline-primary px-4">Đặt Lịch</a>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="fw-bold">Đội Ngũ Bác Sĩ</h2>
-                <p class="text-muted">Các chuyên gia hàng đầu trong lĩnh vực nha khoa</p>
-            </div>
-            <div class="row">
-                <div th:each="bacSi : ${bacSis}" class="col-md-4">
-                    <div class="doctor-card bg-white">
-                        <img th:src="${bacSi.anhDaiDien}" th:alt="${bacSi.hoTen}" class="doctor-img">
-                        <h5 th:text="${bacSi.hoTen}">Tên bác sĩ</h5>
-                        <p class="text-muted">Bác sĩ Nha khoa</p>
-                        <p class="small text-muted" th:text="${bacSi.diaChi}">Địa chỉ</p>
-                    </div>
+<!-- ======================== BÁC SĨ ======================== -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Đội Ngũ Bác Sĩ</h2>
+            <p class="text-muted">Chuyên môn cao – Tận tâm – Chu đáo</p>
+        </div>
+
+        <div class="row">
+            <div th:each="bs, stat : ${bacSis}"
+                 class="col-md-4 mb-4"
+                 th:style="'animation-delay:' + (0.1 * ${stat.index} + 0.3) + 's;'">
+                <div class="doctor-card">
+                    <img th:src="@{${bs.anhDaiDien != null ? '/images/' + bs.anhDaiDien : '/images/doctor-default.jpg'}}"
+                         th:alt="${bs.hoTen}"
+                         class="doctor-img mb-3">
+
+                    <h5 th:text="${bs.hoTen}">Tên bác sĩ</h5>
+                    <p class="text-muted">Bác sĩ Nha khoa</p>
+                    <p class="small text-muted" th:text="${bs.diaChi}">Địa chỉ</p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section class="py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="feature-box">
-                        <i class="fas fa-clock text-primary fa-3x mb-3"></i>
-                        <h4>Lịch Hẹn Linh Hoạt</h4>
-                        <p>Đặt lịch trực tuyến 24/7, lựa chọn thời gian phù hợp với bạn</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="feature-box">
-                        <i class="fas fa-shield-alt text-primary fa-3x mb-3"></i>
-                        <h4>An Toàn Tuyệt Đối</h4>
-                        <p>Quy trình vô trùng nghiêm ngặt, đảm bảo an toàn cho bệnh nhân</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="feature-box">
-                        <i class="fas fa-hand-holding-usd text-primary fa-3x mb-3"></i>
-                        <h4>Giá Cả Hợp Lý</h4>
-                        <p>Bảng giá minh bạch, nhiều chương trình ưu đãi hấp dẫn</p>
-                    </div>
+<!-- ======================== CAM KẾT ======================== -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-4 mb-4" style="animation-delay: 0.2s;">
+                <div class="feature-box">
+                    <i class="fas fa-clock fa-3x text-primary mb-3"></i>
+                    <h4>Lịch Hẹn Linh Hoạt</h4>
+                    <p>Đặt lịch online 24/7 – Hỗ trợ nhanh chóng.</p>
                 </div>
             </div>
+
+            <div class="col-md-4 mb-4" style="animation-delay: 0.3s;">
+                <div class="feature-box">
+                    <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
+                    <h4>An Toàn Tuyệt Đối</h4>
+                    <p>Thiết bị vô trùng chuẩn quốc tế.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4" style="animation-delay: 0.4s;">
+                <div class="feature-box">
+                    <i class="fas fa-hand-holding-usd fa-3x text-primary mb-3"></i>
+                    <h4>Giá Cả Minh Bạch</h4>
+                    <p>Chi phí hợp lý – Báo giá rõ ràng.</p>
+                </div>
+            </div>
+
         </div>
-    </section>
+    </div>
+</section>
 
-    <footer>
-        <div class="container">
-            <div class="row gy-4">
-                <div class="col-lg-4">
-                    <h4 class="fw-bold mb-3"><i class="fas fa-tooth me-2"></i>Sunshine</h4>
-                    <p class="opacity-75">Hệ thống nha khoa tiêu chuẩn quốc tế, mang lại nụ cười khỏe đẹp và sự tự tin cho hàng triệu khách hàng Việt Nam.</p>
-                    <div class="social-links mt-4">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <h5 class="fw-bold mb-3">Liên Hệ</h5>
-                    <ul class="list-unstyled opacity-75">
-                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Đường Nguyễn Văn Cừ, Q.5, TP.HCM</li>
-                        <li class="mb-2"><i class="fas fa-phone me-2"></i> Hotline: 1900 1234</li>
-                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> tuvan@nhakhoasunshine.com</li>
-                        <li class="mb-2"><i class="fas fa-clock me-2"></i> 08:00 - 20:00 (T2 - CN)</li>
-                    </ul>
-                </div>
-                <div class="col-lg-4">
-                    <h5 class="fw-bold mb-3">Dịch Vụ Chính</h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a href="/dich-vu" class="text-white text-decoration-none opacity-75 hover-white">Niềng Răng Thẩm Mỹ</a></li>
-                        <li class="mb-2"><a href="/dich-vu" class="text-white text-decoration-none opacity-75 hover-white">Cấy Ghép Implant</a></li>
-                        <li class="mb-2"><a href="/dich-vu" class="text-white text-decoration-none opacity-75 hover-white">Bọc Răng Sứ</a></li>
-                        <li class="mb-2"><a href="/dich-vu" class="text-white text-decoration-none opacity-75 hover-white">Tẩy Trắng Răng</a></li>
-                    </ul>
-                </div>
+<!-- ======================== FOOTER ======================== -->
+<footer>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold">Nha Khoa Sunshine</h5>
+                <p>Chăm sóc nụ cười Việt – Tự tin tỏa sáng</p>
             </div>
-            <hr class="my-4 opacity-25">
-            <div class="text-center opacity-75 small">
-                &copy; 2024 Nha Khoa Sunshine. All rights reserved.
+
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold">Liên Hệ</h5>
+                <p><i class="fas fa-map-marker-alt"></i> 123 ABC, Quận 1, TP.HCM</p>
+                <p><i class="fas fa-phone"></i> (028) 1234 5678</p>
+                <p><i class="fas fa-envelope"></i> info@sunshine.com</p>
             </div>
+
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold">Theo Dõi</h5>
+                <a href="#" class="me-3"><i class="fab fa-facebook fa-2x"></i></a>
+                <a href="#" class="me-3"><i class="fab fa-instagram fa-2x"></i></a>
+                <a href="#"><i class="fab fa-youtube fa-2x"></i></a>
+            </div>
+
         </div>
-    </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <hr>
+        <p class="text-center">&copy; 2024 Nha Khoa Sunshine - All rights reserved</p>
+    </div>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
