@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nhakhoa.model.HoaDon;
 import com.nhakhoa.model.TrangThaiHoaDon;
-import com.nhakhoa.service.hoaDonService;
+import com.nhakhoa.service.HoaDonService;
 import com.nhakhoa.service.MomoService;
 import com.nhakhoa.service.VnpayService;
 import com.nhakhoa.service.ZalopayService;
@@ -21,7 +21,7 @@ import com.nhakhoa.service.ZalopayService;
 public class PaymentController {
 
     @Autowired
-    private hoaDonService hoaDonService;
+    private HoaDonService hoaDonService;
 
     @Autowired
     private MomoService momoService;
@@ -33,15 +33,16 @@ public class PaymentController {
     private ZalopayService zalopayService;
 
     @GetMapping("/{id}")
-    public String hienThiTrangThanhToan(@PathVariable Long id, Model model) {
-        HoaDon hoaDon = hoaDonService.findById(id);
-        if (hoaDon == null) {
-            model.addAttribute("error", "Không tìm thấy hóa đơn!");
-            return "error";
-        }
-        model.addAttribute("hoaDon", hoaDon);
-        return "thanh-toan";
-    }
+public String hienThiTrangThanhToan(@PathVariable Long id, Model model) {
+    HoaDon hoaDon = hoaDonService.findById(id); // trả về HoaDon hoặc null
+if (hoaDon == null) {
+    model.addAttribute("error", "Không tìm thấy hóa đơn!");
+    return "error";
+}
+    model.addAttribute("hoaDon", hoaDon);
+    return "thanh-toan";
+}
+
 
     @PostMapping("/thuc-hien")
     public String thucHienThanhToan(@RequestParam("hoaDonId") Long hoaDonId,
