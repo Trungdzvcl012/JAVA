@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc Nghiệm Sức Khỏe - Nha Khoa Sunshine</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #4fc3f7; --accent-color: #0288d1; --text-color: #333; --light-color: #f8f9fa;
+        }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--light-color); color: var(--text-color); }
+        
+        .navbar { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .navbar-brand { font-weight: bold; font-size: 1.5rem; }
+        .navbar-nav .nav-link { color: white !important; font-weight: 500; }
+        .btn-nav-primary { background: white; color: var(--accent-color); border-radius: 25px; padding: 6px 18px; font-weight: 600; text-decoration: none; }
+
+        
+        .quiz-container {
+            max-width: 800px; margin: 50px auto; background: white;
+            border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); overflow: hidden;
+            min-height: 500px; display: flex; flex-direction: column;
+        }
+        .quiz-header { background: #e1f5fe; padding: 25px 40px; }
+        .progress { height: 8px; border-radius: 4px; margin-top: 10px; }
+        .progress-bar { background-color: var(--accent-color); }
+        .quiz-body { padding: 40px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        
+        .option-btn {
+            display: block; width: 100%; padding: 15px 20px; margin-bottom: 15px;
+            border: 2px solid #eee; border-radius: 10px; background: white;
+            text-align: left; font-weight: 600; color: #555; cursor: pointer; transition: all 0.2s;
+        }
+        .option-btn:hover { border-color: var(--primary-color); background: #f0faff; color: var(--accent-color); }
+        
+        .recommendation-box {
+            background: #f8f9fa; border-left: 5px solid var(--accent-color);
+            padding: 20px; margin: 20px 0; border-radius: 5px; text-align: left;
+        }
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/trang-chu"> <i class="fas fa-tooth me-2"></i> Nha Khoa Sunshine </a>
+        <div class="collapse navbar-collapse justify-content-end">
+            <ul class="navbar-nav align-items-center">
+                <li class="nav-item"><a class="nav-link" href="/trang-chu">Trang Chủ</a></li>
+                <li class="nav-item ms-3"><a class="btn-nav-primary" href="/lich-hen/dat-lich">Đặt Lịch</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="quiz-container">
+        
+        <div id="start-screen" class="quiz-body text-center">
+            <i class="fas fa-user-md text-primary fa-5x mb-4"></i>
+            <h2 class="fw-bold mb-3">Kiểm Tra Sức Khỏe Răng Miệng</h2>
+            <p class="text-muted mb-4">Trả lời 10 câu hỏi nhanh để nhận tư vấn chuyên sâu từ hệ thống.</p>
+            <button onclick="startQuiz()" class="btn btn-primary btn-lg rounded-pill px-5">Bắt Đầu Ngay</button>
+        </div>
+
+        <div id="question-screen" class="hidden h-100 d-flex flex-column">
+            <div class="quiz-header">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="fw-bold text-muted small">Câu hỏi</span>
+                    <span class="fw-bold text-primary" id="progress-text">1/10</span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" id="progress-bar" style="width: 10%;"></div>
+                </div>
+            </div>
+            <div class="quiz-body fade-in">
+                <h4 class="fw-bold mb-4" id="question-text">Nội dung câu hỏi?</h4>
+                <div id="options-container"></div>
+            </div>
+        </div>
+
+        <div id="result-screen" class="hidden quiz-body text-center fade-in">
+            <i class="fas fa-clipboard-check text-success fa-4x mb-3"></i>
+            <h3 class="fw-bold text-primary">Kết Quả Phân Tích</h3>
+            <div class="recommendation-box">
+                <h5 class="fw-bold text-dark" id="result-title">Tiêu đề</h5>
+                <p id="result-desc">Mô tả...</p>
+                <hr>
+                <h6 class="fw-bold text-primary">Lời khuyên:</h6>
+                <ul class="text-muted small mb-0 ps-3" id="result-advice"></ul>
+            </div>
+            <a id="btn-booking" href="#" class="btn btn-primary btn-lg rounded-pill px-5">Đặt Lịch Khám Ngay</a>
+            <div class="mt-3">
+                <button onclick="location.reload()" class="btn btn-link text-muted">Làm lại</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { text: "Vấn đề lớn nhất của bạn là gì?", options: [{text:"Răng hô/móm/lệch", type:"nieng"}, {text:"Răng ố vàng/xấu", type:"su"}, {text:"Đau nhức/Sâu răng", type:"benh"}, {text:"Kiểm tra định kỳ", type:"quat"}] },
+        { text: "Bạn có bị ê buốt khi ăn đồ nóng/lạnh?", options: [{text:"Không", type:"quat"}, {text:"Hơi ê nhẹ", type:"su"}, {text:"Ê buốt nhiều", type:"benh"}, {text:"Khó nhai", type:"nieng"}] },
+        { text: "Tình trạng nướu của bạn?", options: [{text:"Bình thường", type:"quat"}, {text:"Hay chảy máu", type:"benh"}, {text:"Sưng đỏ", type:"benh"}, {text:"Bình thường", type:"su"}] },
+        { text: "Bạn có bị mất răng không?", options: [{text:"Không", type:"quat"}, {text:"Mất răng hàm", type:"benh"}, {text:"Răng sứt mẻ", type:"su"}, {text:"Đủ răng nhưng lệch", type:"nieng"}] },
+        { text: "Khớp cắn của bạn thế nào?", options: [{text:"Bình thường", type:"quat"}, {text:"Hô hoặc Móm", type:"nieng"}, {text:"Răng lộn xộn", type:"nieng"}, {text:"Ổn định", type:"su"}] },
+        { text: "Bạn có hay bị mắc thức ăn?", options: [{text:"Hiếm khi", type:"quat"}, {text:"Thường xuyên", type:"benh"}, {text:"Do răng thưa", type:"su"}, {text:"Do răng lệch", type:"nieng"}] },
+        { text: "Lần cuối lấy cao răng?", options: [{text:"< 6 tháng", type:"quat"}, {text:"> 1 năm", type:"quat"}, {text:"Chưa bao giờ", type:"benh"}, {text:"Không nhớ", type:"benh"}] },
+        { text: "Răng khôn có làm phiền bạn?", options: [{text:"Không/Đã nhổ", type:"quat"}, {text:"Thỉnh thoảng đau", type:"benh"}, {text:"Đau thường xuyên", type:"benh"}, {text:"Không rõ", type:"quat"}] },
+        { text: "Màu sắc răng hiện tại?", options: [{text:"Trắng sáng", type:"quat"}, {text:"Hơi vàng", type:"su"}, {text:"Nhiễm màu nặng", type:"su"}, {text:"Bình thường", type:"nieng"}] },
+        { text: "Mong muốn lớn nhất?", options: [{text:"Đẹp hoàn hảo", type:"su"}, {text:"Răng đều đặn", type:"nieng"}, {text:"Hết đau nhức", type:"benh"}, {text:"Sạch sẽ", type:"quat"}] }
+    ];
+
+    let currentIdx = 0, scores = {nieng:0, su:0, benh:0, quat:0};
+    
+    function startQuiz() {
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('question-screen').classList.remove('hidden');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        const q = questions[currentIdx];
+        document.getElementById('question-text').innerText = q.text;
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        document.getElementById('progress-bar').style.width = `${((currentIdx+1)/questions.length)*100}%`;
+        document.getElementById('progress-text').innerText = `${currentIdx+1}/${questions.length}`;
+
+        q.options.forEach(opt => {
+            const btn = document.createElement('div');
+            btn.className = 'option-btn';
+            btn.innerText = opt.text;
+            btn.onclick = () => {
+                scores[opt.type]++;
+                if(++currentIdx < questions.length) loadQuestion();
+                else showResult();
+            };
+            container.appendChild(btn);
+        });
+    }
+
+    function showResult() {
+        document.getElementById('question-screen').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+        const maxType = Object.keys(scores).reduce((a, b) => scores[a] >= scores[b] ? a : b);
+        
+        const content = {
+            nieng: { title: "Cần Niềng Răng - Chỉnh Nha", desc: "Bạn gặp vấn đề về khớp cắn/sắp xếp răng.", advice: ["Chụp phim X-quang.", "Niềng sớm để rút ngắn thời gian."], link: "/lich-hen/dat-lich" },
+            su: { title: "Cần Nha Khoa Thẩm Mỹ", desc: "Cải thiện màu sắc/hình dáng răng.", advice: ["Tẩy trắng hoặc Bọc sứ.", "Thiết kế nụ cười."], link: "/lich-hen/dat-lich" },
+            benh: { title: "Cần Điều Trị Bệnh Lý", desc: "Có dấu hiệu sâu răng/viêm nướu.", advice: ["Kiểm tra tủy răng ngay.", "Không tự uống thuốc giảm đau."], link: "/lich-hen/dat-lich" },
+            quat: { title: "Chăm Sóc Định Kỳ", desc: "Răng miệng ổn định.", advice: ["Lấy cao răng 6 tháng/lần.", "Giữ vệ sinh hàng ngày."], link: "/lich-hen/dat-lich" }
+        };
+        
+        const res = content[maxType];
+        document.getElementById('result-title').innerText = res.title;
+        document.getElementById('result-desc').innerText = res.desc;
+        document.getElementById('result-advice').innerHTML = res.advice.map(i => `<li>${i}</li>`).join('');
+        document.getElementById('btn-booking').href = res.link;
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
