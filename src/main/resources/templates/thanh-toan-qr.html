@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thanh toán QR</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #4b79a1, #283e51);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 520px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(18px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            text-align: center;
+            color: #fff;
+        }
+
+        .payment-buttons button {
+            padding: 12px 26px;
+            margin: 8px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 17px;
+            color: white;
+            font-weight: 600;
+            transition: 0.25s;
+        }
+
+        .momo { background: linear-gradient(135deg, #c70074, #7a0047); }
+        .zalopay { background: linear-gradient(135deg, #1cb5e0, #0083b0); }
+        .vnpay { background: linear-gradient(135deg, #0046ad, #001f54); }
+
+        .payment-buttons button:hover {
+            transform: translateY(-3px);
+            opacity: 0.9;
+        }
+
+        #qrBox {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+        }
+
+        #qrImage {
+            width: 260px;
+            height: 260px;
+        }
+
+        /* Loading Spinner */
+        .loader {
+            border: 5px solid rgba(255,255,255,0.3);
+            border-top: 5px solid #fff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Countdown */
+        #countdown {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffdf80;
+        }
+
+        #reloadBtn {
+            display: none;
+            margin-top: 15px;
+            padding: 10px 25px;
+            background: #ff9800;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Nút quay về trang chủ */
+        .return-home {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 22px;
+            background: #f43f5e;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: 0.25s;
+            box-shadow: 0px 4px 12px rgba(244, 63, 94, 0.45);
+        }
+
+        .return-home:hover {
+            background: #e11d48;
+            transform: translateY(-2px);
+            box-shadow: 0px 6px 16px rgba(244, 63, 94, 0.6);
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Thanh Toán Hóa Đơn</h2>
+
+    <p class="info-text">
+        <b>Mã hóa đơn:</b> <span th:text="${hoaDon.id}"></span><br>
+        <b>Tổng tiền:</b> <span th:text="${hoaDon.tongTien}"></span> VNĐ
+    </p>
+
+    <h3>Chọn phương thức thanh toán</h3>
+
+    <div class="payment-buttons">
+        <button class="momo" onclick="choosePayment('momo')">Momo QR</button>
+        <button class="zalopay" onclick="choosePayment('zalopay')">ZaloPay QR</button>
+        <button class="vnpay" onclick="choosePayment('vnpay')">VNPay QR</button>
+    </div>
+
+    <div id="qrBox">
+        <div class="loader" id="loader"></div>
+        <canvas id="qrImage"></canvas>
+
+        <div id="countdown"></div>
+
+        <button id="reloadBtn" onclick="reloadQR()">Tạo lại mã QR</button>
+    </div>
+
+    <!-- Nút quay về trang chủ -->
+    <a href="/" class="return-home">← Quay về trang chủ</a>
+</div>
+
+<script>
+    const basePaymentUrl = /*[[${paymentUrl}]]*/ "";
+
+    let timer, timeLeft = 300;
+
+    function choosePayment(type) {
+        document.getElementById("loader").style.display = "block";
+        document.getElementById("qrImage").style.display = "none";
+        document.getElementById("reloadBtn").style.display = "none";
+
+        let finalUrl = basePaymentUrl;
+
+        if (type === "momo") finalUrl += "&method=MOMO";
+        if (type === "zalopay") finalUrl += "&method=ZALOPAY";
+        if (type === "vnpay") finalUrl += "&method=VNPAY";
+
+        setTimeout(() => {
+            new QRious({
+                element: document.getElementById("qrImage"),
+                size: 260,
+                value: finalUrl
+            });
+
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("qrImage").style.display = "block";
+
+            startCountdown();
+        }, 800);
+    }
+
+    function startCountdown() {
+        clearInterval(timer);
+        timeLeft = 300;
+
+        timer = setInterval(() => {
+            let min = Math.floor(timeLeft / 60);
+            let sec = timeLeft % 60;
+
+            document.getElementById("countdown").innerHTML =
+                "Mã QR hết hạn sau: " + min + ":" + (sec < 10 ? "0" + sec : sec);
+
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                document.getElementById("countdown").innerHTML =
+                    "<span style='color: #ff4444;'>Mã QR đã hết hạn</span>";
+
+                document.getElementById("qrImage").style.opacity = "0.3";
+                document.getElementById("reloadBtn").style.display = "block";
+            }
+
+            timeLeft--;
+        }, 1000);
+    }
+
+    function reloadQR() {
+        document.getElementById("qrImage").style.opacity = "1";
+        choosePayment("momo");
+    }
+
+    choosePayment("momo");
+</script>
+
+</body>
+</html>
