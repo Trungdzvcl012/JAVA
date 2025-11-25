@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nhakhoa.model.HoaDon;
 import com.nhakhoa.model.LichHen;
@@ -43,7 +44,10 @@ public class LichHenController {
 
     // Trang danh sách lịch hẹn của người dùng
     @GetMapping("/cua-toi")
-    public String lichHenCuaToi(Model model, Principal principal) {
+    public String lichHenCuaToi(Model model, Principal principal,
+                                @RequestParam(value = "success", required = false) String success,
+                                @RequestParam(value = "error", required = false) String error,
+                                @RequestParam(value = "hoaDonId", required = false) Long hoaDonId) {
         if (principal == null) return "redirect:/dang-nhap";
 
         Optional<NguoiDung> nguoiDungOpt = nguoiDungService.findByEmail(principal.getName());
@@ -69,6 +73,18 @@ public class LichHenController {
         model.addAttribute("lichHenChoXacNhan", choXacNhan);
         model.addAttribute("lichHenDaXacNhan", daXacNhan);
         model.addAttribute("lichHenHoanThanh", daHoanThanh);
+
+        // --- Hiển thị thông báo thanh toán thành công ---
+        if ("true".equals(success) && hoaDonId != null) {
+            HoaDon hoaDon = hoaDonService.findById(hoaDonId);
+            if (hoaDon != null) {
+                model.addAttribute("hoaDonThanhToan", hoaDon);
+            }
+        }
+
+        // Truyền thông báo chung
+        model.addAttribute("success", success);
+        model.addAttribute("error", error);
 
         return "lich-hen-cua-toi";
     }
@@ -131,7 +147,7 @@ public class LichHenController {
 
             HoaDon savedHoaDon = hoaDonService.save(hoaDon);
 
-            // Redirect sang trang thanh toán
+            // Redirect sang trang thanh toán QR
             return "redirect:/thanh-toan/" + savedHoaDon.getId();
         } catch (Exception e) {
             model.addAttribute("error", "Có lỗi xảy ra khi đặt lịch: " + e.getMessage());
