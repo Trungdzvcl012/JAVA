@@ -12,10 +12,11 @@
 <body>
     <nav th:replace="~{fragments/header-logged-in :: header}"></nav>
 
+    <!-- Alert thông báo -->
     <div th:if="${param.success} or ${param.error}" class="container mt-3">
         <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="fas fa-check-circle me-2"></i>
-            <span th:if="${param.success == 'true'}">Đặt lịch thành công!</span>
+            <span th:if="${param.success == 'true'}">Thanh toán / Đặt lịch thành công!</span>
             <span th:if="${param.success == 'huy'}">Hủy lịch hẹn thành công!</span>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
@@ -37,6 +38,7 @@
                 </a>
             </div>
 
+            <!-- Thống kê nhanh -->
             <div class="row mb-4" th:if="${tongLichHen > 0}">
                 <div class="col-md-3 mb-3">
                     <div class="card stats-card">
@@ -58,7 +60,7 @@
                     <div class="card bg-info text-white">
                         <div class="card-body text-center py-4">
                             <h3 class="mb-0" th:text="${lichHenDaXacNhan}">0</h3>
-                            <small>Đã Xác Nhận</small>
+                            <small>Đã Thanh Toán / Xác Nhận</small>
                         </div>
                     </div>
                 </div>
@@ -72,6 +74,7 @@
                 </div>
             </div>
 
+            <!-- Tabs danh sách lịch -->
             <ul class="nav nav-tabs mb-4" id="appointmentTabs" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button">
@@ -96,6 +99,8 @@
             </ul>
 
             <div class="tab-content" id="appointmentTabsContent">
+
+                <!-- Tab Tất cả -->
                 <div class="tab-pane fade show active" id="all" role="tabpanel">
                     <div th:if="${not #lists.isEmpty(lichHens)}">
                         <div th:each="lichHen : ${lichHens}" class="card service-card mb-4">
@@ -131,10 +136,8 @@
                                                <i class="fas fa-eye me-1"></i>Chi Tiết
                                             </a>
                                             <th:block th:if="${lichHen.trangThai == 'CHO_XAC_NHAN' or lichHen.trangThai == 'DA_XAC_NHAN'}">
-                                                <form th:action="@{/lich-hen/huy/{id}(id=${lichHen.id})}" 
-                                                      method="post" class="d-inline">
-                                                    <button type="submit" class="btn btn-outline-danger btn-sm" 
-                                                            onclick="return confirm('Bạn có chắc muốn hủy lịch hẹn này?')">
+                                                <form th:action="@{/lich-hen/huy/{id}(id=${lichHen.id})}" method="post" class="d-inline">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Bạn có chắc muốn hủy lịch hẹn này?')">
                                                         <i class="fas fa-times me-1"></i>Hủy Lịch
                                                     </button>
                                                 </form>
@@ -155,45 +158,42 @@
                     </div>
                 </div>
 
+                <!-- Tab Chờ xác nhận -->
                 <div class="tab-pane fade" id="waiting" role="tabpanel">
-                    <div th:if="${not #lists.isEmpty(lichHens)}">
-                        <div th:each="lichHen : ${lichHens}" th:if="${lichHen.trangThai == 'CHO_XAC_NHAN'}" class="card service-card mb-4">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                    <div class="col-md-8">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <h5 th:text="${lichHen.dichVu?.tenDichVu} ?: 'Không xác định'">Dịch vụ</h5>
-                                            <span class="badge-status badge-waiting">
-                                                <span th:text="${lichHen.trangThaiDisplayName}">Chờ Xác Nhận</span>
-                                            </span>
-                                        </div>
-                                        <p class="mb-1">
-                                            <i class="fas fa-user-md text-primary me-2"></i>
-                                            <span th:text="${lichHen.bacSi?.hoTen} ?: 'Không xác định'">Bác sĩ</span>
-                                        </p>
-                                        <p class="mb-1">
-                                            <i class="fas fa-clock text-primary me-2"></i>
-                                            <span th:text="${#temporals.format(lichHen.thoiGianHen, 'dd/MM/yyyy HH:mm')}">Thời gian</span>
-                                        </p>
-                                        <p class="mb-0 text-muted" th:if="${lichHen.lyDoKham}">
-                                            <i class="fas fa-sticky-note me-2"></i>
-                                            <span th:text="${lichHen.lyDoKham}">Lý do khám</span>
-                                        </p>
+                    <div th:each="lichHen : ${lichHens}" th:if="${lichHen.trangThai == 'CHO_XAC_NHAN'}" class="card service-card mb-4">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 th:text="${lichHen.dichVu?.tenDichVu} ?: 'Không xác định'">Dịch vụ</h5>
+                                        <span class="badge-status badge-waiting">
+                                            <span th:text="${lichHen.trangThaiDisplayName}">Chờ Xác Nhận</span>
+                                        </span>
                                     </div>
-                                    <div class="col-md-4 text-end">
-                                        <div class="btn-group-vertical">
-                                            <a th:href="@{/lich-hen/{id}(id=${lichHen.id})}" 
-                                               class="btn btn-outline-primary btn-sm mb-2">
-                                               <i class="fas fa-eye me-1"></i>Chi Tiết
-                                            </a>
-                                            <form th:action="@{/lich-hen/huy/{id}(id=${lichHen.id})}" 
-                                                  method="post" class="d-inline">
-                                                <button type="submit" class="btn btn-outline-danger btn-sm" 
-                                                        onclick="return confirm('Bạn có chắc muốn hủy lịch hẹn này?')">
-                                                    <i class="fas fa-times me-1"></i>Hủy Lịch
-                                                </button>
-                                            </form>
-                                        </div>
+                                    <p class="mb-1">
+                                        <i class="fas fa-user-md text-primary me-2"></i>
+                                        <span th:text="${lichHen.bacSi?.hoTen} ?: 'Không xác định'">Bác sĩ</span>
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="fas fa-clock text-primary me-2"></i>
+                                        <span th:text="${#temporals.format(lichHen.thoiGianHen, 'dd/MM/yyyy HH:mm')}">Thời gian</span>
+                                    </p>
+                                    <p class="mb-0 text-muted" th:if="${lichHen.lyDoKham}">
+                                        <i class="fas fa-sticky-note me-2"></i>
+                                        <span th:text="${lichHen.lyDoKham}">Lý do khám</span>
+                                    </p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="btn-group-vertical">
+                                        <a th:href="@{/lich-hen/{id}(id=${lichHen.id})}" 
+                                           class="btn btn-outline-primary btn-sm mb-2">
+                                           <i class="fas fa-eye me-1"></i>Chi Tiết
+                                        </a>
+                                        <form th:action="@{/lich-hen/huy/{id}(id=${lichHen.id})}" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Bạn có chắc muốn hủy lịch hẹn này?')">
+                                                <i class="fas fa-times me-1"></i>Hủy Lịch
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -205,45 +205,42 @@
                     </div>
                 </div>
 
+                <!-- Tab Đã xác nhận -->
                 <div class="tab-pane fade" id="confirmed" role="tabpanel">
-                    <div th:if="${not #lists.isEmpty(lichHens)}">
-                        <div th:each="lichHen : ${lichHens}" th:if="${lichHen.trangThai == 'DA_XAC_NHAN'}" class="card service-card mb-4">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                    <div class="col-md-8">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <h5 th:text="${lichHen.dichVu?.tenDichVu} ?: 'Không xác định'">Dịch vụ</h5>
-                                            <span class="badge-status badge-confirmed">
-                                                <span th:text="${lichHen.trangThaiDisplayName}">Đã Xác Nhận</span>
-                                            </span>
-                                        </div>
-                                        <p class="mb-1">
-                                            <i class="fas fa-user-md text-primary me-2"></i>
-                                            <span th:text="${lichHen.bacSi?.hoTen} ?: 'Không xác định'">Bác sĩ</span>
-                                        </p>
-                                        <p class="mb-1">
-                                            <i class="fas fa-clock text-primary me-2"></i>
-                                            <span th:text="${#temporals.format(lichHen.thoiGianHen, 'dd/MM/yyyy HH:mm')}">Thời gian</span>
-                                        </p>
-                                        <p class="mb-0 text-muted" th:if="${lichHen.lyDoKham}">
-                                            <i class="fas fa-sticky-note me-2"></i>
-                                            <span th:text="${lichHen.lyDoKham}">Lý do khám</span>
-                                        </p>
+                    <div th:each="lichHen : ${lichHens}" th:if="${lichHen.trangThai == 'DA_XAC_NHAN'}" class="card service-card mb-4">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 th:text="${lichHen.dichVu?.tenDichVu} ?: 'Không xác định'">Dịch vụ</h5>
+                                        <span class="badge-status badge-confirmed">
+                                            <span th:text="${lichHen.trangThaiDisplayName}">Đã Xác Nhận</span>
+                                        </span>
                                     </div>
-                                    <div class="col-md-4 text-end">
-                                        <div class="btn-group-vertical">
-                                            <a th:href="@{/lich-hen/{id}(id=${lichHen.id})}" 
-                                               class="btn btn-outline-primary btn-sm mb-2">
-                                               <i class="fas fa-eye me-1"></i>Chi Tiết
-                                            </a>
-                                            <form th:action="@{/lich-hen/huy/{id}(id=${lichHen.id})}" 
-                                                  method="post" class="d-inline">
-                                                <button type="submit" class="btn btn-outline-danger btn-sm" 
-                                                        onclick="return confirm('Bạn có chắc muốn hủy lịch hẹn này?')">
-                                                    <i class="fas fa-times me-1"></i>Hủy Lịch
-                                                </button>
-                                            </form>
-                                        </div>
+                                    <p class="mb-1">
+                                        <i class="fas fa-user-md text-primary me-2"></i>
+                                        <span th:text="${lichHen.bacSi?.hoTen} ?: 'Không xác định'">Bác sĩ</span>
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="fas fa-clock text-primary me-2"></i>
+                                        <span th:text="${#temporals.format(lichHen.thoiGianHen, 'dd/MM/yyyy HH:mm')}">Thời gian</span>
+                                    </p>
+                                    <p class="mb-0 text-muted" th:if="${lichHen.lyDoKham}">
+                                        <i class="fas fa-sticky-note me-2"></i>
+                                        <span th:text="${lichHen.lyDoKham}">Lý do khám</span>
+                                    </p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="btn-group-vertical">
+                                        <a th:href="@{/lich-hen/{id}(id=${lichHen.id})}" 
+                                           class="btn btn-outline-primary btn-sm mb-2">
+                                           <i class="fas fa-eye me-1"></i>Chi Tiết
+                                        </a>
+                                        <form th:action="@{/lich-hen/huy/{id}(id=${lichHen.id})}" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Bạn có chắc muốn hủy lịch hẹn này?')">
+                                                <i class="fas fa-times me-1"></i>Hủy Lịch
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -255,37 +252,35 @@
                     </div>
                 </div>
 
+                <!-- Tab Hoàn thành -->
                 <div class="tab-pane fade" id="completed" role="tabpanel">
-                    <div th:if="${not #lists.isEmpty(lichHens)}">
-                        <div th:each="lichHen : ${lichHens}" th:if="${lichHen.trangThai == 'DA_HOAN_THANH'}" class="card service-card mb-4">
-                            <div class="card-body">
-                                <div class="row align-items-center">
-                                    <div class="col-md-8">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <h5 th:text="${lichHen.dichVu?.tenDichVu} ?: 'Không xác định'">Dịch vụ</h5>
-                                            <span class="badge-status badge-completed">
-                                                <span th:text="${lichHen.trangThaiDisplayName}">Đã Hoàn Thành</span>
-                                            </span>
-                                        </div>
-                                        <p class="mb-1">
-                                            <i class="fas fa-user-md text-primary me-2"></i>
-                                            <span th:text="${lichHen.bacSi?.hoTen} ?: 'Không xác định'">Bác sĩ</span>
-                                        </p>
-                                        <p class="mb-1">
-                                            <i class="fas fa-clock text-primary me-2"></i>
-                                            <span th:text="${#temporals.format(lichHen.thoiGianHen, 'dd/MM/yyyy HH:mm')}">Thời gian</span>
-                                        </p>
-                                        <p class="mb-0 text-muted" th:if="${lichHen.lyDoKham}">
-                                            <i class="fas fa-sticky-note me-2"></i>
-                                            <span th:text="${lichHen.lyDoKham}">Lý do khám</span>
-                                        </p>
+                    <div th:each="lichHen : ${lichHens}" th:if="${lichHen.trangThai == 'DA_HOAN_THANH'}" class="card service-card mb-4">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 th:text="${lichHen.dichVu?.tenDichVu} ?: 'Không xác định'">Dịch vụ</h5>
+                                        <span class="badge-status badge-completed">
+                                            <span th:text="${lichHen.trangThaiDisplayName}">Đã Hoàn Thành</span>
+                                        </span>
                                     </div>
-                                    <div class="col-md-4 text-end">
-                                        <a th:href="@{/lich-hen/{id}(id=${lichHen.id})}" 
-                                           class="btn btn-outline-primary btn-sm">
-                                           <i class="fas fa-eye me-1"></i>Chi Tiết
-                                        </a>
-                                    </div>
+                                    <p class="mb-1">
+                                        <i class="fas fa-user-md text-primary me-2"></i>
+                                        <span th:text="${lichHen.bacSi?.hoTen} ?: 'Không xác định'">Bác sĩ</span>
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="fas fa-clock text-primary me-2"></i>
+                                        <span th:text="${#temporals.format(lichHen.thoiGianHen, 'dd/MM/yyyy HH:mm')}">Thời gian</span>
+                                    </p>
+                                    <p class="mb-0 text-muted" th:if="${lichHen.lyDoKham}">
+                                        <i class="fas fa-sticky-note me-2"></i>
+                                        <span th:text="${lichHen.lyDoKham}">Lý do khám</span>
+                                    </p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <a th:href="@{/lich-hen/{id}(id=${lichHen.id})}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-eye me-1"></i>Chi Tiết
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -295,6 +290,7 @@
                         <h4 class="text-muted">Không có lịch hẹn đã hoàn thành</h4>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
