@@ -55,10 +55,13 @@ public class NguoiDung {
     private VaiTro vaiTro;
 
     @Column(name = "da_kich_hoat")
-    private boolean daKichHoat = true;
+    private boolean daKichHoat = true; // SỬA: Mặc định là true để admin có thể đăng nhập
 
     @Column(name = "thoi_gian_tao")
     private LocalDateTime thoiGianTao;
+
+    @Column(length = 1000)
+    private String ghiChu;
 
     @OneToMany(mappedBy = "nguoiDung", cascade = CascadeType.ALL)
     private List<LichHen> lichHens = new ArrayList<>();
@@ -72,9 +75,10 @@ public class NguoiDung {
     // Constructors
     public NguoiDung() {
         this.thoiGianTao = LocalDateTime.now();
+        this.daKichHoat = true; // Đảm bảo mặc định là true
     }
 
-    // Getters and Setters
+    // Getters and Setters - GIỮ NGUYÊN
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getHoTen() { return hoTen; }
@@ -97,6 +101,8 @@ public class NguoiDung {
     public void setDaKichHoat(boolean daKichHoat) { this.daKichHoat = daKichHoat; }
     public LocalDateTime getThoiGianTao() { return thoiGianTao; }
     public void setThoiGianTao(LocalDateTime thoiGianTao) { this.thoiGianTao = thoiGianTao; }
+    public String getGhiChu() { return ghiChu; }
+    public void setGhiChu(String ghiChu) { this.ghiChu = ghiChu; }
     public List<LichHen> getLichHens() { return lichHens; }
     public void setLichHens(List<LichHen> lichHens) { this.lichHens = lichHens; }
     public List<LichLamViec> getLichLamViecs() { return lichLamViecs; }

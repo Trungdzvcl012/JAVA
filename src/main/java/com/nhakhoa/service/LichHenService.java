@@ -23,7 +23,7 @@ public class LichHenService {
     
     @Transactional(readOnly = true)
     public List<LichHen> findAll() {
-        return lichHenRepository.findAllWithDetails();
+        return lichHenRepository.findAll(); // Sửa: xóa WithDetails()
     }
     
     @Transactional(readOnly = true)
@@ -33,12 +33,12 @@ public class LichHenService {
     
     @Transactional(readOnly = true)
     public List<LichHen> findByNguoiDung(NguoiDung nguoiDung) {
-        return lichHenRepository.findByNguoiDungOrderByThoiGianHenDesc(nguoiDung);
+        return lichHenRepository.findByNguoiDung(nguoiDung); // Sửa: xóa OrderByThoiGianHenDesc
     }
     
     @Transactional(readOnly = true)
     public List<LichHen> findByBacSi(NguoiDung bacSi) {
-        return lichHenRepository.findByBacSiOrderByThoiGianHenDesc(bacSi);
+        return lichHenRepository.findByBacSi(bacSi); // Sửa: xóa OrderByThoiGianHenDesc
     }
     
     @Transactional(readOnly = true)
@@ -62,12 +62,22 @@ public class LichHenService {
     public List<LichHen> findLichHenSapToi() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime end = now.plusDays(7);
-        return lichHenRepository.findUpcomingAppointments(now, end);
+        // Sửa: tìm bằng cách filter
+        return lichHenRepository.findAll().stream()
+                .filter(lh -> lh.getThoiGianHen() != null && 
+                             lh.getThoiGianHen().isAfter(now) && 
+                             lh.getThoiGianHen().isBefore(end))
+                .toList();
     }
     
     @Transactional(readOnly = true)
     public long demLichHenHoanThanhTheoNgay(LocalDate ngay) {
-        return lichHenRepository.countCompletedAppointmentsByDate(ngay);
+        // Sửa: tìm bằng cách filter
+        return lichHenRepository.findAll().stream()
+                .filter(lh -> lh.getTrangThai() == TrangThaiLichHen.DA_HOAN_THANH &&
+                             lh.getThoiGianHen() != null &&
+                             lh.getThoiGianHen().toLocalDate().equals(ngay))
+                .count();
     }
     
     // Thêm method để hủy lịch hẹn
@@ -85,5 +95,44 @@ public class LichHenService {
             }
         }
         return false;
+    }
+    
+    // THÊM CÁC METHOD MỚI
+    public boolean xacNhanLichHen(Long id, String email) {
+        Optional<LichHen> lichHenOpt = lichHenRepository.findById(id);
+        if (lichHenOpt.isPresent()) {
+            LichHen lichHen = lichHenOpt.get();
+            
+            // Kiểm tra quyền: bác sĩ được phân công hoặc nhân viên
+            if (lichHen.getBacSi().getEmail().equals(email) || email.equals("nhanvien")) {
+                if (lichHen.getTrangThai() == TrangThaiLichHen.CHO_XAC_NHAN) {
+                    lichHen.setTrangThai(TrangThaiLichHen.DA_XAC_NHAN);
+                    lichHen.setThoiGianCapNhat(LocalDateTime.now());
+                    lichHenRepository.save(lichHen);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    public boolean capNhatTrangThai(Long id, TrangThaiLichHen trangThai) {
+        Optional<LichHen> lichHenOpt = lichHenRepository.findById(id);
+        if (lichHenOpt.isPresent()) {
+            LichHen lichHen = lichHenOpt.get();
+            lichHen.setTrangThai(trangThai);
+            lichHen.setThoiGianCapNhat(LocalDateTime.now());
+            lichHenRepository.save(lichHen);
+            return true;
+        }
+        return false;
+    }
+    
+    @Transactional(readOnly = true)
+    public List<LichHen> findByBacSiEmail(String email) {
+        // Sửa: tìm bằng cách filter
+        return lichHenRepository.findAll().stream()
+                .filter(lh -> lh.getBacSi() != null && lh.getBacSi().getEmail().equals(email))
+                .toList();
     }
 }

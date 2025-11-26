@@ -1,17 +1,10 @@
 package com.nhakhoa.service;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,30 +13,62 @@ import com.nhakhoa.model.VaiTro;
 import com.nhakhoa.repository.NguoiDungRepository;
 
 @Service
-public class NguoiDungService implements UserDetailsService {
+public class NguoiDungService {
     
     private final NguoiDungRepository nguoiDungRepository;
     private final PasswordEncoder passwordEncoder;
     
-    // Sử dụng constructor injection
     @Autowired
     public NguoiDungService(NguoiDungRepository nguoiDungRepository, PasswordEncoder passwordEncoder) {
         this.nguoiDungRepository = nguoiDungRepository;
         this.passwordEncoder = passwordEncoder;
     }
     
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<NguoiDung> nguoiDungOpt = nguoiDungRepository.findByEmail(email);
-        if (nguoiDungOpt.isEmpty()) {
-            throw new UsernameNotFoundException("Không tìm thấy người dùng với email: " + email);
+    // PHƯƠNG THỨC ĐĂNG KÝ - SỬA LẠI ĐỂ ADMIN LUÔN ĐƯỢC KÍCH HOẠT
+    public void dangKyNguoiDung(NguoiDung nguoiDung) {
+        System.out.println("=== SERVICE: ĐĂNG KÝ NGƯỜI DÙNG ===");
+        System.out.println("Email: " + nguoiDung.getEmail());
+        System.out.println("Vai trò: " + nguoiDung.getVaiTro());
+        
+        // Mã hóa mật khẩu
+        if (nguoiDung.getMatKhau() != null && !nguoiDung.getMatKhau().isEmpty()) {
+            nguoiDung.setMatKhau(passwordEncoder.encode(nguoiDung.getMatKhau()));
         }
-        NguoiDung nguoiDung = nguoiDungOpt.get();
-        return new User(nguoiDung.getEmail(), nguoiDung.getMatKhau(), getAuthorities(nguoiDung));
+        
+        // Xử lý trạng thái kích hoạt: ADMIN luôn được kích hoạt
+        if (nguoiDung.getVaiTro() == VaiTro.ADMIN || nguoiDung.getVaiTro() == VaiTro.PATIENT) {
+            nguoiDung.setDaKichHoat(true);
+            System.out.println("=== " + nguoiDung.getVaiTro() + " - TỰ ĐỘNG KÍCH HOẠT ===");
+        } else {
+            nguoiDung.setDaKichHoat(false); // Bác sĩ/Nhân viên: chờ duyệt
+            System.out.println("=== " + nguoiDung.getVaiTro() + " - CHỜ ADMIN DUYỆT ===");
+        }
+        
+        // Đảm bảo thời gian tạo
+        if (nguoiDung.getThoiGianTao() == null) {
+            nguoiDung.setThoiGianTao(LocalDateTime.now());
+        }
+        
+        // Lưu người dùng
+        nguoiDungRepository.save(nguoiDung);
+        
+        System.out.println("=== ĐĂNG KÝ THÀNH CÔNG ===");
+        System.out.println("Email: " + nguoiDung.getEmail());
+        System.out.println("Vai trò: " + nguoiDung.getVaiTro());
+        System.out.println("Trạng thái kích hoạt: " + nguoiDung.isDaKichHoat());
     }
     
-    private Collection<? extends GrantedAuthority> getAuthorities(NguoiDung nguoiDung) {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + nguoiDung.getVaiTro().name()));
+    // THÊM PHƯƠNG THỨC CHO ADMIN
+    public long countByVaiTro(String vaiTro) {
+        return nguoiDungRepository.countByVaiTroString(vaiTro);
+    }
+    
+    public long demBenhNhanMoiThang() {
+        return nguoiDungRepository.countNewPatientsThisMonth();
+    }
+    
+    public boolean existsByEmail(String email) {
+        return nguoiDungRepository.existsByEmail(email);
     }
     
     public List<NguoiDung> findAll() {
@@ -68,7 +93,10 @@ public class NguoiDungService implements UserDetailsService {
     
     public NguoiDung save(NguoiDung nguoiDung) {
         if (nguoiDung.getMatKhau() != null && !nguoiDung.getMatKhau().isEmpty()) {
-            nguoiDung.setMatKhau(passwordEncoder.encode(nguoiDung.getMatKhau()));
+            // Chỉ mã hóa nếu mật khẩu chưa được mã hóa
+            if (!nguoiDung.getMatKhau().startsWith("$2a$")) {
+                nguoiDung.setMatKhau(passwordEncoder.encode(nguoiDung.getMatKhau()));
+            }
         }
         return nguoiDungRepository.save(nguoiDung);
     }
@@ -76,10 +104,7 @@ public class NguoiDungService implements UserDetailsService {
     public void deleteById(Long id) {
         nguoiDungRepository.deleteById(id);
     }
-    
-    public boolean existsByEmail(String email) {
-        return nguoiDungRepository.existsByEmail(email);
-    }
+ 
     
     public long countByVaiTro(VaiTro vaiTro) {
         return nguoiDungRepository.countByVaiTro(vaiTro);
@@ -87,5 +112,52 @@ public class NguoiDungService implements UserDetailsService {
     
     public boolean kiemTraMatKhau(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+    
+    public NguoiDung updateNguoiDung(NguoiDung nguoiDung) {
+        return save(nguoiDung);
+    }
+    
+    public NguoiDung createNguoiDung(NguoiDung nguoiDung) {
+        return save(nguoiDung);
+    }
+    
+    public List<NguoiDung> findByDaKichHoat(boolean daKichHoat) {
+        return nguoiDungRepository.findByDaKichHoat(daKichHoat);
+    }
+    
+    public List<NguoiDung> findByVaiTroAndDaKichHoat(VaiTro vaiTro, boolean daKichHoat) {
+        return nguoiDungRepository.findByVaiTroAndDaKichHoat(vaiTro, daKichHoat);
+    }
+    
+    // THÊM PHƯƠNG THỨC TOGGLE TRẠNG THÁI
+    public void toggleTrangThai(Long id) {
+        Optional<NguoiDung> nguoiDungOpt = nguoiDungRepository.findById(id);
+        if (nguoiDungOpt.isPresent()) {
+            NguoiDung nguoiDung = nguoiDungOpt.get();
+            nguoiDung.setDaKichHoat(!nguoiDung.isDaKichHoat());
+            nguoiDungRepository.save(nguoiDung);
+            System.out.println("=== TOGGLE TRẠNG THÁI: " + nguoiDung.getEmail() + " -> " + nguoiDung.isDaKichHoat() + " ===");
+        }
+    }
+    
+    public void kichHoatTaiKhoan(Long id) {
+        Optional<NguoiDung> nguoiDungOpt = nguoiDungRepository.findById(id);
+        if (nguoiDungOpt.isPresent()) {
+            NguoiDung nguoiDung = nguoiDungOpt.get();
+            nguoiDung.setDaKichHoat(true);
+            nguoiDungRepository.save(nguoiDung);
+            System.out.println("=== ĐÃ KÍCH HOẠT TÀI KHOẢN: " + nguoiDung.getEmail() + " ===");
+        }
+    }
+    
+    public void voHieuHoaTaiKhoan(Long id) {
+        Optional<NguoiDung> nguoiDungOpt = nguoiDungRepository.findById(id);
+        if (nguoiDungOpt.isPresent()) {
+            NguoiDung nguoiDung = nguoiDungOpt.get();
+            nguoiDung.setDaKichHoat(false);
+            nguoiDungRepository.save(nguoiDung);
+            System.out.println("=== ĐÃ VÔ HIỆU HÓA TÀI KHOẢN: " + nguoiDung.getEmail() + " ===");
+        }
     }
 }
