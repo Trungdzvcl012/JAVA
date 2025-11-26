@@ -7,6 +7,56 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .role-card {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+            height: 100%;
+        }
+        .role-card:hover {
+            border-color: #4fc3f7;
+            background-color: #f8fdff;
+            transform: translateY(-2px);
+        }
+        .role-card.active {
+            border-color: #4fc3f7;
+            background-color: #e1f5fe;
+            box-shadow: 0 4px 8px rgba(79, 195, 247, 0.2);
+        }
+        .role-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #4fc3f7;
+        }
+        .demo-accounts {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            border-left: 4px solid #4fc3f7;
+        }
+        .demo-account-item {
+            margin-bottom: 8px;
+            padding: 8px;
+            border-radius: 5px;
+            background: white;
+            font-size: 0.85rem;
+        }
+        .demo-toggle {
+            cursor: pointer;
+            color: #4fc3f7;
+            font-weight: 500;
+        }
+        .demo-content {
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -23,43 +73,113 @@
     <section class="py-5">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-5">
+                <div class="col-md-8">
                     <div class="card shadow">
                         <div class="card-body p-5">
                             <h2 class="text-center mb-4">Đăng Nhập</h2>
                             
                             <div th:if="${param.error}" class="alert alert-danger" role="alert">
-                                Email hoặc mật khẩu không đúng!
+                                <span th:if="${param.error == 'true'}">Email hoặc mật khẩu không đúng!</span>
                             </div>
-                            <div th:if="${param.logout}" class="alert alert-success" role="alert">
-                                Bạn đã đăng xuất thành công!
+                            <div th:if="${param.role_error}" class="alert alert-warning" role="alert">
+                                Tài khoản không có quyền truy cập với vai trò này!
                             </div>
-                            <div th:if="${success}" class="alert alert-success" role="alert">
-                                <span th:text="${success}"></span>
+                            <div th:if="${error}" class="alert alert-danger" role="alert">
+                                <span th:text="${error}"></span>
                             </div>
 
-                            <form th:action="@{/dang-nhap}" method="post">
+                            <!-- Role Selection -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Đăng nhập với vai trò:</label>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="role-card active" onclick="selectRole('PATIENT')" id="rolePatient" data-role="PATIENT">
+                                            <div class="role-icon">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <h6>Bệnh Nhân</h6>
+                                            <small class="text-muted">Đặt lịch & Quản lý hồ sơ</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="role-card" onclick="selectRole('DOCTOR')" id="roleDoctor" data-role="DOCTOR">
+                                            <div class="role-icon">
+                                                <i class="fas fa-user-md"></i>
+                                            </div>
+                                            <h6>Bác Sĩ</h6>
+                                            <small class="text-muted">Quản lý lịch hẹn & Bệnh án</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="role-card" onclick="selectRole('STAFF')" id="roleStaff" data-role="STAFF">
+                                            <div class="role-icon">
+                                                <i class="fas fa-user-tie"></i>
+                                            </div>
+                                            <h6>Nhân Viên</h6>
+                                            <small class="text-muted">Quản lý hệ thống</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="selectedRole" name="role" value="PATIENT">
+                            </div>
+
+                            <form th:action="@{/dang-nhap}" method="post" id="loginForm">
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" name="username" required>
+                                    <input type="email" class="form-control" id="email" name="email" required 
+                                           placeholder="Nhập email của bạn">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="password" class="form-label">Mật khẩu</label>
-                                    <input type="password" class="form-control" id="password" name="password" required>
+                                    <label for="matKhau" class="form-label">Mật khẩu</label>
+                                    <input type="password" class="form-control" id="matKhau" name="matKhau" required 
+                                           placeholder="Nhập mật khẩu">
                                 </div>
 
-                                <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="rememberMe" name="remember-me">
-                                    <label class="form-check-label" for="rememberMe">Ghi nhớ đăng nhập</label>
-                                </div>
+                                <!-- Hidden role field -->
+                                <input type="hidden" name="role" id="requestedRole" value="PATIENT">
 
-                                <button type="submit" class="btn btn-primary w-100 py-2">Đăng Nhập</button>
+                                <button type="submit" class="btn btn-primary w-100 py-2">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Đăng Nhập
+                                </button>
                             </form>
 
-                            <div class="text-center mt-3">
-                                <p><a href="#">Quên mật khẩu?</a></p>
-                                <p>Chưa có tài khoản? <a th:href="@{/dang-ky}">Đăng ký ngay</a></p>
+                            <!-- Demo Accounts (Collapsible) -->
+                            <div class="demo-accounts mt-4">
+                                <div class="demo-toggle" onclick="toggleDemoAccounts()">
+                                    <i class="fas fa-chevron-down me-2"></i>
+                                    <strong>Tài khoản demo (Nhấn để xem)</strong>
+                                </div>
+                                <div class="demo-content" id="demoContent">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="demo-account-item">
+                                                <strong class="text-primary">Bệnh nhân:</strong><br>
+                                                <strong>Email:</strong> patient@example.com<br>
+                                                <strong>Mật khẩu:</strong> 123456
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="demo-account-item">
+                                                <strong class="text-primary">Bác sĩ:</strong><br>
+                                                <strong>Email:</strong> doctor@example.com<br>
+                                                <strong>Mật khẩu:</strong> 123456
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="demo-account-item">
+                                                <strong class="text-primary">Nhân viên:</strong><br>
+                                                <strong>Email:</strong> staff@example.com<br>
+                                                <strong>Mật khẩu:</strong> 123456
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <p><a href="#" class="text-muted">Quên mật khẩu?</a></p>
+                                <p>Chưa có tài khoản? <a th:href="@{/dang-ky}" class="text-primary fw-bold">Đăng ký ngay</a></p>
                             </div>
                         </div>
                     </div>
@@ -67,6 +187,80 @@
             </div>
         </div>
     </section>
+
+    <script>
+        // Role selection function
+        function selectRole(role) {
+            console.log('Selecting role:', role);
+            
+            // Remove active class from all cards
+            document.querySelectorAll('.role-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Add active class to selected card
+            const selectedCard = document.getElementById('role' + role);
+            if (selectedCard) {
+                selectedCard.classList.add('active');
+            }
+            
+            // Update hidden input
+            document.getElementById('requestedRole').value = role;
+            
+            console.log('Role updated to:', role);
+        }
+
+        // Toggle demo accounts visibility
+        function toggleDemoAccounts() {
+            const demoContent = document.getElementById('demoContent');
+            const toggleIcon = document.querySelector('.demo-toggle i');
+            
+            if (demoContent.style.display === 'block') {
+                demoContent.style.display = 'none';
+                toggleIcon.className = 'fas fa-chevron-down me-2';
+            } else {
+                demoContent.style.display = 'block';
+                toggleIcon.className = 'fas fa-chevron-up me-2';
+            }
+        }
+
+        // Auto-fill demo accounts for testing
+        function fillDemoAccount(role) {
+            let email = '';
+            let password = '123456';
+            
+            switch(role) {
+                case 'PATIENT':
+                    email = 'patient@example.com';
+                    break;
+                case 'DOCTOR':
+                    email = 'doctor@example.com';
+                    break;
+                case 'STAFF':
+                    email = 'staff@example.com';
+                    break;
+            }
+            
+            document.getElementById('email').value = email;
+            document.getElementById('matKhau').value = password;
+            
+            // Show notification
+            alert(`Đã điền thông tin demo cho ${role === 'PATIENT' ? 'Bệnh nhân' : role === 'DOCTOR' ? 'Bác sĩ' : 'Nhân viên'}`);
+        }
+
+        // Initialize with PATIENT role selected
+        document.addEventListener('DOMContentLoaded', function() {
+            selectRole('PATIENT');
+            
+            // Add double-click to fill demo accounts
+            document.querySelectorAll('.role-card').forEach(card => {
+                card.addEventListener('dblclick', function() {
+                    const role = this.getAttribute('data-role');
+                    fillDemoAccount(role);
+                });
+            });
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
