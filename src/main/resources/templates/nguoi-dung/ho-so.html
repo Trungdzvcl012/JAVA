@@ -1,1 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hồ Sơ Cá Nhân</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container mt-5">
+    <h2>Hồ Sơ Cá Nhân</h2>
+
+    <div class="mb-3 text-center">
+        <img th:src="@{${nguoiDung.anhDaiDien}}" class="rounded-circle"
+             style="width:120px; height:120px;" alt="Ảnh đại diện">
+    </div>
+
+    <form th:action="@{/nguoi-dung/ho-so/cap-nhat}" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label class="form-label">Họ và tên</label>
+            <input type="text" class="form-control" th:name="hoTen" th:value="${nguoiDung.hoTen}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Số điện thoại</label>
+            <input type="text" class="form-control" th:name="soDienThoai" th:value="${nguoiDung.soDienThoai}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Địa chỉ</label>
+            <input type="text" class="form-control" th:name="diaChi" th:value="${nguoiDung.diaChi}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Cập nhật ảnh đại diện</label>
+            <input type="file" class="form-control" name="anhDaiDienFile" accept="image/*">
+        </div>
+
+        <button type="submit" class="btn btn-success">Cập nhật</button>
+        <a class="btn btn-secondary" href="/trang-chu">Quay về Trang Chủ</a>
+    </form>
+</div>
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
 
