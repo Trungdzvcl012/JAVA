@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +22,7 @@ public class LichHenService {
     
     @Transactional(readOnly = true)
     public List<LichHen> findAll() {
-        return lichHenRepository.findAll(); // Sửa: xóa WithDetails()
+        return lichHenRepository.findAll(); 
     }
     
     @Transactional(readOnly = true)
@@ -33,12 +32,11 @@ public class LichHenService {
     
     @Transactional(readOnly = true)
     public List<LichHen> findByNguoiDung(NguoiDung nguoiDung) {
-        return lichHenRepository.findByNguoiDung(nguoiDung); // Sửa: xóa OrderByThoiGianHenDesc
-    }
+        return lichHenRepository.findByNguoiDung(nguoiDung); 
     
     @Transactional(readOnly = true)
     public List<LichHen> findByBacSi(NguoiDung bacSi) {
-        return lichHenRepository.findByBacSi(bacSi); // Sửa: xóa OrderByThoiGianHenDesc
+        return lichHenRepository.findByBacSi(bacSi); 
     }
     
     @Transactional(readOnly = true)
@@ -134,5 +132,6 @@ public class LichHenService {
         return lichHenRepository.findAll().stream()
                 .filter(lh -> lh.getBacSi() != null && lh.getBacSi().getEmail().equals(email))
                 .toList();
+        
     }
 }
