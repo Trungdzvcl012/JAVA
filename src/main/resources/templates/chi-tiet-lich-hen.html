@@ -89,8 +89,6 @@
                             <i class="fas fa-arrow-left me-2"></i>Quay Lại
                         </a>
                     </div>
-
-                    <!-- Main Content -->
                     <div class="card detail-card">
                         <div class="card-body p-4">
                             <!-- Status Header -->
@@ -112,18 +110,18 @@
                                     
                                     <div class="info-item">
                                         <strong><i class="fas fa-user-md me-2 text-primary"></i>Bác Sĩ:</strong>
-                                        <div class="mt-1" th:text="${lichHen.bacSi?.hoTen} ?: 'Không xác định'">Bác sĩ</div>
+                                        <div class="mt-1" th:text="${lichHen.bacSi?.hoTen} ?: 'Không xác định'">Bác Sĩ</div>
                                     </div>
 
                                     <div class="info-item">
                                         <strong><i class="fas fa-calendar-alt me-2 text-primary"></i>Thời Gian:</strong>
-                                        <div class="mt-1" th:text="${#temporals.format(lichHen.thoiGianHen, 'HH:mm dd/MM/yyyy')}">Thời gian</div>
+                                        <div class="mt-1" th:text="${#temporals.format(lichHen.thoiGianHen, 'HH:mm dd/MM/yyyy')}">Thời Gian</div>
                                     </div>
 
                                     <div class="info-item">
                                         <strong><i class="fas fa-money-bill-wave me-2 text-primary"></i>Dịch Vụ:</strong>
                                         <div class="mt-1">
-                                            <span th:text="${lichHen.dichVu?.tenDichVu} ?: 'Không xác định'">Tên dịch vụ</span>
+                                            <span th:text="${lichHen.dichVu?.tenDichVu} ?: 'Không xác định'">Tên dịch Vụ</span>
                                             <br>
                                             <small class="text-muted" th:if="${lichHen.dichVu?.giaDichVu}">
                                                 Giá: <span th:text="${#numbers.formatCurrency(lichHen.dichVu.giaDichVu)}">0</span>
@@ -167,12 +165,12 @@
                             <div class="mt-4 pt-3 border-top action-buttons">
                                 <div class="d-flex gap-3 justify-content-end">
                                     <a th:href="@{/lich-hen/cua-toi}" class="btn btn-outline-secondary">
-                                        <i class="fas fa-list me-2"></i>Danh Sách Lịch Hẹn
+                                        <i class="fas fa-list me-2"></i> Danh Sách Lịch Hẹn
                                     </a>
                                     <th:block th:if="${lichHen.trangThai == 'CHO_XAC_NHAN' or lichHen.trangThai == 'DA_XAC_NHAN'}">
                                         <form th:action="@{/lich-hen/huy/{id}(id=${lichHen.id})}" method="post" class="d-inline">
                                             <button type="submit" class="btn btn-danger" 
-                                                    onclick="return confirm('Bạn có chắc muốn hủy lịch hẹn này?')">
+                                                    onclick="return confirm('Bạn chắc chắn muốn hủy lịch hẹn này?')">
                                                 <i class="fas fa-times me-2"></i>Hủy Lịch Hẹn
                                             </button>
                                         </form>
@@ -193,12 +191,12 @@
                                     <h5 class="card-title"><i class="fas fa-info-circle me-2 text-primary"></i>Thông Tin Hỗ Trợ</h5>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <p class="mb-2"><strong>Địa chỉ phòng khám:</strong> 123 Đường ABC, Quận 1, TP.HCM</p>
-                                            <p class="mb-2"><strong>Hotline:</strong> (028) 1234 5678</p>
+                                            <p class="mb-2"><strong>Địa chỉ phòng khám:</strong> 789 Đường ABC, Quận 1, TP.HCM</p>
+                                            <p class="mb-2"><strong>Hotline:</strong> (028) 1234 8678</p>
                                         </div>
                                         <div class="col-md-6">
                                             <p class="mb-2"><strong>Giờ làm việc:</strong> Thứ 2 - Thứ 6: 8:00 - 17:00</p>
-                                            <p class="mb-0"><strong>Email:</strong> info@nhakhoasunshine.com</p>
+                                            <p class="mb-0"><strong>Email:</strong> nhom5nhakhoasunshine.com</p>
                                         </div>
                                     </div>
                                 </div>
