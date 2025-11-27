@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public class LichHenService {
     
     @Transactional(readOnly = true)
     public List<LichHen> findAll() {
-        return lichHenRepository.findAll(); 
+        return lichHenRepository.findAll(); // Sửa: xóa WithDetails()
     }
     
     @Transactional(readOnly = true)
@@ -32,11 +33,12 @@ public class LichHenService {
     
     @Transactional(readOnly = true)
     public List<LichHen> findByNguoiDung(NguoiDung nguoiDung) {
-        return lichHenRepository.findByNguoiDung(nguoiDung); 
+        return lichHenRepository.findByNguoiDung(nguoiDung); // Sửa: xóa OrderByThoiGianHenDesc
+    }
     
     @Transactional(readOnly = true)
     public List<LichHen> findByBacSi(NguoiDung bacSi) {
-        return lichHenRepository.findByBacSi(bacSi); 
+        return lichHenRepository.findByBacSi(bacSi); // Sửa: xóa OrderByThoiGianHenDesc
     }
     
     @Transactional(readOnly = true)
@@ -81,7 +83,7 @@ public class LichHenService {
     // Thêm method để hủy lịch hẹn
     public boolean huyLichHen(Long id, String emailNguoiDung) {
         Optional<LichHen> lichHenOpt = lichHenRepository.findById(id);
-        if (lichHenOpt.isPresent()) {
+if (lichHenOpt.isPresent()) {
             LichHen lichHen = lichHenOpt.get();
             // Kiểm tra xem người dùng có quyền hủy lịch này không
             if (lichHen.getNguoiDung().getEmail().equals(emailNguoiDung) && 
@@ -132,6 +134,5 @@ public class LichHenService {
         return lichHenRepository.findAll().stream()
                 .filter(lh -> lh.getBacSi() != null && lh.getBacSi().getEmail().equals(email))
                 .toList();
-        
     }
 }
