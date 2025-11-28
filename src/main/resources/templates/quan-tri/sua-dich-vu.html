@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sửa Dịch vụ - Quản trị</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .sidebar {
+            background: linear-gradient(135deg, #2c3e50, #34495e) !important;
+            min-height: 100vh;
+        }
+        .sidebar .nav-link {
+            color: #ecf0f1 !important;
+            padding: 12px 20px;
+            margin: 2px 0;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .sidebar .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+        .sidebar .nav-link.active {
+            background: #3498db;
+            box-shadow: 0 2px 10px rgba(52, 152, 219, 0.3);
+        }
+        .form-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/quan-tri/dashboard}">
+                <i class="fas fa-edit me-2"></i>
+                SỬA THÔNG TIN DỊCH VỤ
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link text-white" th:href="@{/quan-tri/dich-vu}">
+                    <i class="fas fa-arrow-left me-1"></i> Quay lại
+                </a>
+                <a class="nav-link text-white" th:href="@{/quan-tri/dashboard}">
+                    <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="position-sticky pt-3">
+                    <div class="text-center mb-4">
+                        <h5 class="text-white mb-0">MENU QUẢN TRỊ</h5>
+                        <small class="text-light opacity-75">Quản lý hệ thống</small>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/quan-tri/dashboard}">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/quan-tri/nguoi-dung}">
+                                <i class="fas fa-users me-2"></i>
+                                Quản lý Người dùng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/quan-tri/dich-vu}">
+                                <i class="fas fa-teeth me-2"></i>
+                                Quản lý Dịch vụ
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/quan-tri/lich-hen}">
+                                <i class="fas fa-calendar-alt me-2"></i>
+                                Quản lý Lịch hẹn
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/quan-tri/hoa-don}">
+                                <i class="fas fa-file-invoice-dollar me-2"></i>
+                                Quản lý Hóa đơn
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/quan-tri/bao-cao}">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                Báo cáo Thống kê
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <div>
+                        <h1 class="h2 mb-1">
+                            <i class="fas fa-edit text-primary me-2"></i>
+                            Sửa Thông tin Dịch vụ
+                        </h1>
+                        <p class="text-muted mb-0">Cập nhật thông tin dịch vụ trong hệ thống</p>
+                    </div>
+                </div>
+
+                <!-- Form sửa dịch vụ -->
+                <div class="row justify-content-center">
+                    <div class="col-md-10">
+                        <div class="card form-card">
+                            <div class="card-header bg-warning text-dark">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-tooth me-2"></i>
+                                    Cập nhật Thông tin
+                                </h5>
+                            </div>
+                            <div class="card-body p-4">
+                                <form th:action="@{/quan-tri/dich-vu/cap-nhat}" method="post" th:object="${dichVu}">
+                                    <input type="hidden" th:field="*{id}" />
+                                    
+                                    <div class="row">
+                                        <div class="col-md-8 mb-3">
+                                            <label for="tenDichVu" class="form-label">Tên dịch vụ *</label>
+                                            <input type="text" class="form-control" id="tenDichVu" th:field="*{tenDichVu}" 
+                                                   required placeholder="Nhập tên dịch vụ">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="thoiGianDuKien" class="form-label">Thời gian (phút) *</label>
+                                            <input type="number" class="form-control" id="thoiGianDuKien" th:field="*{thoiGianDuKien}" 
+                                                   required placeholder="30" min="1">
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="moTa" class="form-label">Mô tả dịch vụ</label>
+                                        <textarea class="form-control" id="moTa" th:field="*{moTa}" rows="3" 
+                                                  placeholder="Mô tả chi tiết về dịch vụ"></textarea>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="giaDichVu" class="form-label">Giá dịch vụ *</label>
+                                            <input type="number" class="form-control" id="giaDichVu" th:field="*{giaDichVu}" 
+                                                   required placeholder="Nhập giá dịch vụ" min="0">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="hinhAnh" class="form-label">Hình ảnh</label>
+                                            <input type="text" class="form-control" id="hinhAnh" th:field="*{hinhAnh}" 
+                                                   placeholder="URL hình ảnh">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="dangKhuyenMai" th:field="*{dangKhuyenMai}">
+                                                <label class="form-check-label" for="dangKhuyenMai">
+                                                    Đang khuyến mãi
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="giaKhuyenMai" class="form-label">Giá khuyến mãi</label>
+                                            <input type="number" class="form-control" id="giaKhuyenMai" th:field="*{giaKhuyenMai}" 
+                                                   placeholder="Nhập giá khuyến mãi" min="0">
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end border-top pt-3">
+                                        <a th:href="@{/quan-tri/dich-vu}" class="btn btn-secondary me-md-2 px-4">
+                                            <i class="fas fa-times me-1"></i> Hủy bỏ
+                                        </a>
+                                        <button type="submit" class="btn btn-warning px-4">
+                                            <i class="fas fa-save me-1"></i> Cập nhật
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white mt-5 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <small>&copy; 2024 Hệ thống Quản trị Nha khoa. All rights reserved.</small>
+                </div>
+                <div class="col-md-6 text-end">
+                    <small>Sửa Thông tin Dịch vụ</small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
