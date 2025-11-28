@@ -120,7 +120,6 @@ public class ChatAPIController {
          
             return "Lỗi API: (" + e.getRawStatusCode() + ") Vui lòng kiểm tra lại API Key. Thông báo chi tiết: " + errorBody;
         } catch (RestClientException e) {
-            e.printStackTrace(); 
             return "Lỗi Server: Lỗi không xác định. Vui lòng kiểm tra log."; 
         }
     }
