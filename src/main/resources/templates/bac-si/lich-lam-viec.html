@@ -3,33 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lịch làm việc - Bác sĩ</title>
+    <title>Lịch làm việc - Bác Sĩ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .fc-event {
-            cursor: pointer;
+        .sidebar {
+            background: linear-gradient(135deg, #1e3c72, #2a5298) !important;
+            min-height: 100vh;
         }
-        .status-trong { background-color: #d1ecf1 !important; }
-        .-status-dang-kham { background-color: #d4edda !important; }
-        .status-nghi { background-color: #f8d7da !important; }
+        .sidebar .nav-link {
+            color: #ecf0f1 !important;
+            padding: 12px 20px;
+            margin: 2px 0;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .sidebar .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+        .sidebar .nav-link.active {
+            background: #3498db;
+            box-shadow: 0 2px 10px rgba(52, 152, 219, 0.3);
+        }
+        .calendar-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .time-slot {
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        .time-slot:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-1px);
+        }
+        .time-slot.busy {
+            background-color: #fff3cd;
+            border-color: #ffeaa7;
+        }
+        .time-slot.available {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #1e3c72, #2a5298);">
         <div class="container">
-            <a class="navbar-brand" href="/trang-chu">
-                <i class="fas fa-tooth me-2"></i>Nha Khoa Smile
+            <a class="navbar-brand" th:href="@{/bac-si/dashboard}">
+                <i class="fas fa-calendar-check me-2"></i>
+                LỊCH LÀM VIỆC - BÁC SĨ
             </a>
             <div class="navbar-nav ms-auto">
-                <span class="navbar-text me-3">
-                    <i class="fas fa-user-md me-1"></i>
-                    <span th:text="${#authentication.name}"></span>
-                </span>
-                <a class="nav-link" href="/dang-xuat">
-                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                <a class="nav-link text-white" th:href="@{/bac-si/dashboard}">
+                    <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+                </a>
+                <a class="nav-link text-white" th:href="@{/}">
+                    <i class="fas fa-home me-1"></i> Trang chủ
                 </a>
             </div>
         </div>
@@ -38,155 +74,159 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
                 <div class="position-sticky pt-3">
+                    <div class="text-center mb-4">
+                        <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" 
+                             style="width: 60px; height: 60px;">
+                            <i class="fas fa-user-md" style="color: #1e3c72;"></i>
+                        </div>
+                        <h6 class="text-white mb-0" th:text="${bacSi.hoTen}">BS. Nguyễn Văn A</h6>
+                        <small class="text-light opacity-75">Bác sĩ nha khoa</small>
+                    </div>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="/bac-si/lich-hen">
-                                <i class="fas fa-calendar-check me-2"></i>
-                                Lịch hẹn
+                            <a class="nav-link" th:href="@{/bac-si/dashboard}">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/bac-si/benh-an">
-                                <i class="fas fa-file-medical me-2"></i>
-                                Bệnh án
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="/bac-si/lich-lam-viec">
+                            <a class="nav-link" th:href="@{/bac-si/lich-hen}">
                                 <i class="fas fa-calendar-alt me-2"></i>
+                                Quản lý Lịch hẹn
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/bac-si/benh-an}">
+                                <i class="fas fa-file-medical me-2"></i>
+                                Quản lý Bệnh án
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" th:href="@{/bac-si/lich-lam-viec}">
+                                <i class="fas fa-calendar-check me-2"></i>
                                 Lịch làm việc
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/bac-si/thong-ke}">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                Thống kê cá nhân
                             </a>
                         </li>
                     </ul>
                 </div>
             </nav>
 
-            <!-- Main Content -->
+            <!-- Main content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Header -->
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">
-                        <i class="fas fa-calendar-alt text-primary me-2"></i>
-                        Lịch làm việc
-                    </h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <button class="btn btn-primary me-2" id="btnThemLichLamViec">
-                            <i class="fas fa-plus me-1"></i> Thêm lịch làm việc
+                    <div>
+                        <h1 class="h2 mb-1">
+                            <i class="fas fa-calendar-check text-primary me-2"></i>
+                            Lịch làm việc
+                        </h1>
+                        <p class="text-muted mb-0">Quản lý lịch trình làm việc của bạn</p>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-outline-primary" onclick="previousWeek()">
+                            <i class="fas fa-chevron-left me-2"></i>Tuần trước
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="nextWeek()">
+                            Tuần sau<i class="fas fa-chevron-right ms-2"></i>
+                        </button>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
+                            <i class="fas fa-plus me-2"></i>Thêm lịch
                         </button>
                     </div>
                 </div>
 
-                <!-- Thông tin bác sĩ -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <h5 class="card-title">
-                                            <i class="fas fa-user-md text-primary me-2"></i>
-                                            Thông tin bác sĩ
-                                        </h5>
-                                        <p class="mb-1"><strong>Họ tên:</strong> <span th:text="${bacSi.hoTen}"></span></p>
-                                        <p class="mb-1"><strong>Email:</strong> <span th:text="${bacSi.email}"></span></p>
-                                        <p class="mb-0"><strong>Số điện thoại:</strong> <span th:text="${bacSi.soDienThoai}"></span></p>
-                                    </div>
-                                    <div class="col-md-4 text-md-end">
-                                        <div class="mt-3 mt-md-0">
-                                            <span class="badge bg-success fs-6">Bác sĩ</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Thông báo -->
+                <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <span th:text="${param.success}">Thao tác thành công!</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
 
-                <!-- Lịch làm việc -->
-                <div class="card">
-                    <div class="card-header">
+                <!-- Lịch làm việc tuần -->
+                <div class="card calendar-card mb-4">
+                    <div class="card-header bg-light">
                         <h5 class="card-title mb-0">
-                            <i class="fas fa-calendar me-2"></i>
-                            Lịch làm việc trong tuần
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="calendar"></div>
-                    </div>
-                </div>
-
-                <!-- Danh sách lịch làm việc (dạng bảng) -->
-                <div class="card mt-4">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="fas fa-list me-2"></i>
-                            Danh sách lịch làm việc
+                            <i class="fas fa-calendar-week me-2"></i>
+                            Lịch làm việc tuần này
+                            <span id="weekRange" class="text-muted ms-2">(01/01 - 07/01/2024)</span>
                         </h5>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="table-light">
+                            <table class="table table-bordered">
+                                <thead class="table-primary">
                                     <tr>
-                                        <th>Ngày làm việc</th>
-                                        <th>Giờ bắt đầu</th>
-                                        <th>Giờ kết thúc</th>
-                                        <th>Trạng thái</th>
-                                        <th>Ghi chú</th>
-                                        <th>Thao tác</th>
+                                        <th style="width: 14%">Thứ 2</th>
+                                        <th style="width: 14%">Thứ 3</th>
+                                        <th style="width: 14%">Thứ 4</th>
+                                        <th style="width: 14%">Thứ 5</th>
+                                        <th style="width: 14%">Thứ 6</th>
+                                        <th style="width: 14%">Thứ 7</th>
+                                        <th style="width: 14%">Chủ nhật</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Dữ liệu mẫu - cần thay bằng dữ liệu thực từ controller -->
                                     <tr>
-                                        <td>25/11/2024</td>
-                                        <td>08:00</td>
-                                        <td>17:00</td>
-                                        <td><span class="badge bg-success">Trống</span></td>
-                                        <td>Làm việc bình thường</td>
-                                        <td>
-                                            <div class="btn-group btn-group-sm">
-                                                <button class="btn btn-outline-warning" title="Chỉnh sửa">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="btn btn-outline-danger" title="Xóa">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+                                        <td id="mon" style="height: 400px; vertical-align: top;">
+                                            <!-- Time slots for Monday -->
+                                            <div class="time-slot available">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span class="fw-bold">08:00 - 09:00</span>
+                                                    <span class="badge bg-success">Trống</span>
+                                                </div>
+                                                <small class="text-muted">Không có lịch hẹn</small>
+                                            </div>
+                                            <div class="time-slot busy">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span class="fw-bold">09:00 - 10:00</span>
+                                                    <span class="badge bg-warning">Bận</span>
+                                                </div>
+                                                <small class="text-muted">Nguyễn Văn A - Khám tổng quát</small>
                                             </div>
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td>26/11/2024</td>
-                                        <td>08:00</td>
-                                        <td>12:00</td>
-                                        <td><span class="badge bg-warning">Đang khám</span></td>
-                                        <td>Buổi sáng</td>
-                                        <td>
-                                            <div class="btn-group btn-group-sm">
-                                                <button class="btn btn-outline-warning" title="Chỉnh sửa">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="btn btn-outline-danger" title="Xóa">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+                                        <td id="tue" style="height: 400px; vertical-align: top;">
+                                            <!-- Time slots for Tuesday -->
+                                            <div class="text-center text-muted py-5">
+                                                <i class="fas fa-calendar-times fa-2x mb-2"></i>
+                                                <p>Không có lịch làm việc</p>
                                             </div>
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td>27/11/2024</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                        <td><span class="badge bg-danger">Nghỉ</span></td>
-                                        <td>Nghỉ phép</td>
-                                        <td>
-                                            <div class="btn-group btn-group-sm">
-                                                <button class="btn btn-outline-warning" title="Chỉnh sửa">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="btn btn-outline-danger" title="Xóa">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+                                        <td id="wed" style="height: 400px; vertical-align: top;">
+                                            <!-- Time slots for Wednesday -->
+                                            <div class="time-slot available">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span class="fw-bold">14:00 - 15:00</span>
+                                                    <span class="badge bg-success">Trống</span>
+                                                </div>
+                                                <small class="text-muted">Không có lịch hẹn</small>
+                                            </div>
+                                        </td>
+                                        <td id="thu" style="height: 400px; vertical-align: top;">
+                                            <!-- Time slots for Thursday -->
+                                        </td>
+                                        <td id="fri" style="height: 400px; vertical-align: top;">
+                                            <!-- Time slots for Friday -->
+                                        </td>
+                                        <td id="sat" style="height: 400px; vertical-align: top;">
+                                            <!-- Time slots for Saturday -->
+                                            <div class="text-center text-muted py-5">
+                                                <i class="fas fa-umbrella-beach fa-2x mb-2"></i>
+                                                <p>Nghỉ cuối tuần</p>
+                                            </div>
+                                        </td>
+                                        <td id="sun" style="height: 400px; vertical-align: top;">
+                                            <!-- Time slots for Sunday -->
+                                            <div class="text-center text-muted py-5">
+                                                <i class="fas fa-umbrella-beach fa-2x mb-2"></i>
+                                                <p>Nghỉ cuối tuần</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -195,12 +235,100 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Lịch hẹn sắp tới -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card calendar-card">
+                            <div class="card-header bg-light">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-clock me-2"></i>
+                                    Lịch hẹn sắp tới
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group list-group-flush">
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="fw-bold">Nguyễn Văn A</div>
+                                            <small class="text-muted">Khám tổng quát</small>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="fw-bold">09:00</div>
+                                            <small class="text-muted">Thứ 2</small>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="fw-bold">Trần Thị B</div>
+                                            <small class="text-muted">Nhổ răng khôn</small>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="fw-bold">14:00</div>
+                                            <small class="text-muted">Thứ 4</small>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="fw-bold">Lê Văn C</div>
+                                            <small class="text-muted">Tẩy trắng răng</small>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="fw-bold">10:30</div>
+                                            <small class="text-muted">Thứ 5</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card calendar-card">
+                            <div class="card-header bg-light">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-chart-pie me-2"></i>
+                                    Thống kê tuần
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row text-center">
+                                    <div class="col-4">
+                                        <h3 class="text-primary" th:text="${totalAppointmentsThisWeek}">5</h3>
+                                        <small class="text-muted">Tổng lịch hẹn</small>
+                                    </div>
+                                    <div class="col-4">
+                                        <h3 class="text-success" th:text="${completedAppointmentsThisWeek}">3</h3>
+                                        <small class="text-muted">Đã hoàn thành</small>
+                                    </div>
+                                    <div class="col-4">
+                                        <h3 class="text-warning" th:text="${pendingAppointmentsThisWeek}">2</h3>
+                                        <small class="text-muted">Chờ xác nhận</small>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span>Thời gian làm việc:</span>
+                                        <span class="fw-bold">20 giờ</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span>Lịch hẹn trung bình:</span>
+                                        <span class="fw-bold">5 ca/ngày</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>Tỷ lệ hoàn thành:</span>
+                                        <span class="fw-bold text-success">60%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </main>
         </div>
     </div>
 
     <!-- Modal Thêm lịch làm việc -->
-    <div class="modal fade" id="modalThemLichLamViec" tabindex="-1">
+    <div class="modal fade" id="addScheduleModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -208,100 +336,75 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="formThemLichLamViec">
+                    <form>
                         <div class="mb-3">
                             <label class="form-label">Ngày làm việc</label>
-                            <input type="date" class="form-control" name="ngayLamViec" required>
+                            <input type="date" class="form-control" required>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Giờ bắt đầu</label>
-                                    <input type="time" class="form-control" name="gioBatDau" required>
-                                </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label class="form-label">Giờ bắt đầu</label>
+                                <input type="time" class="form-control" required>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Giờ kết thúc</label>
-                                    <input type="time" class="form-control" name="gioKetThuc" required>
-                                </div>
+                            <div class="col">
+                                <label class="form-label">Giờ kết thúc</label>
+                                <input type="time" class="form-control" required>
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Trạng thái</label>
-                            <select class="form-select" name="trangThai" required>
-                                <option value="TRONG">Trống</option>
-                                <option value="DANG_KHAM">Đang khám</option>
-                                <option value="NGHI">Nghỉ</option>
-                            </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Ghi chú</label>
-                            <textarea class="form-control" name="ghiChu" rows="3"></textarea>
+                            <textarea class="form-control" rows="3" placeholder="Ghi chú (nếu có)"></textarea>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-primary" onclick="themLichLamViec()">Lưu</button>
+                    <button type="button" class="btn btn-primary">Lưu lịch</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer class="bg-dark text-white mt-5 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <small>&copy; 2024 Hệ thống Bác Sĩ Nha khoa. All rights reserved.</small>
+                </div>
+                <div class="col-md-6 text-end">
+                    <small>Bác sĩ: <span th:text="${bacSi.hoTen}">BS. Nguyễn Văn A</span></small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/vi.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'timeGridWeek',
-                locale: 'vi',
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                },
-                events: [
-                    {
-                        title: 'Làm việc',
-                        start: '2024-11-25T08:00:00',
-                        end: '2024-11-25T17:00:00',
-                        className: 'status-trong'
-                    },
-                    {
-                        title: 'Làm việc buổi sáng',
-                        start: '2024-11-26T08:00:00',
-                        end: '2024-11-26T12:00:00',
-                        className: 'status-dang-kham'
-                    },
-                    {
-                        title: 'Nghỉ phép',
-                        start: '2024-11-27',
-                        end: '2024-11-27',
-                        className: 'status-nghi'
-                    }
-                ],
-                eventClick: function(info) {
-                    alert('Sự kiện: ' + info.event.title);
-                }
-            });
-            calendar.render();
+        let currentWeek = 0;
 
-            // Hiển thị modal thêm lịch làm việc
-            document.getElementById('btnThemLichLamViec').addEventListener('click', function() {
-                var modal = new bootstrap.Modal(document.getElementById('modalThemLichLamViec'));
-                modal.show();
-            });
-        });
-
-        function themLichLamViec() {
-            // Logic thêm lịch làm việc
-            alert('Chức năng thêm lịch làm việc đang được phát triển');
-            var modal = bootstrap.Modal.getInstance(document.getElementById('modalThemLichLamViec'));
-            modal.hide();
+        function updateWeekRange() {
+            // Logic để cập nhật phạm vi tuần dựa trên currentWeek
+            const weekRange = document.getElementById('weekRange');
+            // TODO: Implement week calculation
+            weekRange.textContent = '(01/01 - 07/01/2024)';
         }
+
+        function previousWeek() {
+            currentWeek--;
+            updateWeekRange();
+            // TODO: Reload calendar data
+        }
+
+        function nextWeek() {
+            currentWeek++;
+            updateWeekRange();
+            // TODO: Reload calendar data
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateWeekRange();
+        });
     </script>
 </body>
 </html>
