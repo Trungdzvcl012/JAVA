@@ -82,7 +82,9 @@ public class SecurityConfig {
                     "/bac-si", 
                     "/gioi-thieu",
                     "/dang-ky-nhan-vien", 
-                    "/dang-ky-bac-si"
+                    "/dang-ky-bac-si",
+                    // 🚨 ĐÃ BỔ SUNG: Cho phép truy cập công khai vào API Chatbot
+                    "/api/chat/ask" 
                 ).permitAll()
                 
                 // Các URL yêu cầu đăng nhập
@@ -117,8 +119,13 @@ public class SecurityConfig {
                 .accessDeniedPage("/access-denied")
             );
         
-        // Cho phép truy cập H2 console (chỉ cho môi trường dev)
-        http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
+        // 🚨 SỬA LỖI CSRF 403: Bỏ qua kiểm tra CSRF cho API Chatbot
+        // Lưu ý: Cấu hình này phải nằm sau authorizeHttpRequests
+        http.csrf(csrf -> csrf
+            .ignoringRequestMatchers("/h2-console/**", "/api/chat/ask") // Thêm /api/chat/ask vào danh sách bỏ qua
+        );
+        
+        // Cho phép hiển thị H2 console
         http.headers(headers -> headers.frameOptions().disable());
         
         return http.build();
