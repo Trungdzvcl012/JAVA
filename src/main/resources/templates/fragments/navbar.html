@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <!-- Navigation Fragment -->
+    <div th:fragment="navbar(nguoiDung)">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <i class="fas fa-tooth me-2"></i>
+                    Nha Khoa Sunshine
+                </a>
+                
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link active" href="/trang-chu">Trang Chủ</a>
+                    <a class="nav-link" href="/dich-vu">Dịch Vụ</a>
+                    <a class="nav-link" href="/bac-si">Bác Sĩ</a>
+                    <a class="nav-link" href="/lich-hen/cua-toi">Lịch Hẹn</a>
+                    
+                    <!-- Kiểm tra nếu đã đăng nhập -->
+                    <div th:if="${nguoiDung != null}" class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user me-1"></i>
+                            <span th:text="${nguoiDung.hoTen} ?: 'Người dùng'"></span>
+                            <small class="badge bg-primary ms-1" th:text="${nguoiDung.vaiTro}"></small>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Hồ Sơ</a></li>
+                            <li><a class="dropdown-item" href="/lich-hen/cua-toi">Lịch Hẹn Của Tôi</a></li>
+                            
+                            <!-- Hiển thị menu theo vai trò -->
+                            <div th:if="${nguoiDung.vaiTro == 'DOCTOR'}">
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/bac-si/lich-hen">Quản lý Lịch Hẹn</a></li>
+                                <li><a class="dropdown-item" href="/bac-si/benh-an">Quản lý Bệnh Án</a></li>
+                            </div>
+                            
+                            <div th:if="${nguoiDung.vaiTro == 'STAFF'}">
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/nhan-vien/lich-hen">Quản lý Lịch Hẹn</a></li>
+                                <li><a class="dropdown-item" href="/nhan-vien/hoa-don">Quản lý Hóa Đơn</a></li>
+                            </div>
+                            
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/dang-xuat}" method="post">
+                                    <button type="submit" class="dropdown-item">Đăng Xuất</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Nếu chưa đăng nhập -->
+                    <div th:unless="${nguoiDung != null}" class="nav-item">
+                        <a class="nav-link" href="/dang-nhap">
+                            <i class="fas fa-sign-in-alt me-1"></i>Đăng Nhập
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</body>
+</html>
