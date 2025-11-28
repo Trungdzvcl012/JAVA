@@ -3,140 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý lịch hẹn - Bác sĩ</title>
+    <title>Quản lý Lịch hẹn - Bác Sĩ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .status-cho-xac-nhan { background-color: #fff3cd; }
-        .status-da-xac-nhan { background-color: #d1ecf1; }
-        .status-da-hoan-thanh { background-color: #d4edda; }
-        .status-da-huy { background-color: #f8d7da; }
-        .status-khong-den { background-color: #e2e3e5; }
+        .sidebar {
+            background: linear-gradient(135deg, #1e3c72, #2a5298) !important;
+            min-height: 100vh;
+        }
+        .sidebar .nav-link {
+            color: #ecf0f1 !important;
+            padding: 12px 20px;
+            margin: 2px 0;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .sidebar .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+        .sidebar .nav-link.active {
+            background: #3498db;
+            box-shadow: 0 2px 10px rgba(52, 152, 219, 0.3);
+        }
+        .appointment-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 10px;
+        }
+        .appointment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .action-btn {
+            transition: all 0.3s ease;
+        }
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+        .status-badge {
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #1e3c72, #2a5298);">
         <div class="container">
-            <a class="navbar-brand" href="/trang-chu">
-                <i class="fas fa-tooth me-2"></i>Nha Khoa Smile
+            <a class="navbar-brand" th:href="@{/bac-si/dashboard}">
+                <i class="fas fa-calendar-alt me-2"></i>
+                QUẢN LÝ LỊCH HẸN - BÁC SĨ
             </a>
             <div class="navbar-nav ms-auto">
-                <span class="navbar-text me-3">
-                    <i class="fas fa-user-md me-1"></i>
-                    <span th:text="${#authentication.name}"></span>
-                </span>
-                <a class="nav-link" href="/dang-xuat">
-                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                <a class="nav-link text-white" th:href="@{/bac-si/dashboard}">
+                    <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+                </a>
+                <a class="nav-link text-white" th:href="@{/}">
+                    <i class="fas fa-home me-1"></i> Trang chủ
                 </a>
             </div>
         </div>
     </nav>
 
-    <!-- Sidebar & Main Content -->
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
                 <div class="position-sticky pt-3">
+                    <div class="text-center mb-4">
+                        <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" 
+                             style="width: 60px; height: 60px;">
+                            <i class="fas fa-user-md" style="color: #1e3c72;"></i>
+                        </div>
+                        <h6 class="text-white mb-0" th:text="${bacSi.hoTen}">BS. Nguyễn Văn A</h6>
+                        <small class="text-light opacity-75">Bác sĩ nha khoa</small>
+                    </div>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="/bac-si/lich-hen">
-                                <i class="fas fa-calendar-check me-2"></i>
-                                Lịch hẹn
+                            <a class="nav-link" th:href="@{/bac-si/dashboard}">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/bac-si/benh-an">
-                                <i class="fas fa-file-medical me-2"></i>
-                                Bệnh án
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/bac-si/lich-lam-viec">
+                            <a class="nav-link active" th:href="@{/bac-si/lich-hen}">
                                 <i class="fas fa-calendar-alt me-2"></i>
+                                Quản lý Lịch hẹn
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/bac-si/benh-an}">
+                                <i class="fas fa-file-medical me-2"></i>
+                                Quản lý Bệnh án
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/bac-si/lich-lam-viec}">
+                                <i class="fas fa-calendar-check me-2"></i>
                                 Lịch làm việc
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/bac-si/thong-ke}">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                Thống kê cá nhân
                             </a>
                         </li>
                     </ul>
                 </div>
             </nav>
 
-            <!-- Main Content -->
+            <!-- Main content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Header -->
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">
-                        <i class="fas fa-calendar-check text-primary me-2"></i>
-                        Quản lý lịch hẹn
-                    </h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <div class="btn-group me-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="filterLichHen('TAT_CA')">Tất cả</button>
-                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="filterLichHen('CHO_XAC_NHAN')">Chờ xác nhận</button>
-                            <button type="button" class="btn btn-sm btn-outline-success" onclick="filterLichHen('DA_XAC_NHAN')">Đã xác nhận</button>
+                    <div>
+                        <h1 class="h2 mb-1">
+                            <i class="fas fa-calendar-alt text-primary me-2"></i>
+                            Quản lý Lịch hẹn
+                        </h1>
+                        <p class="text-muted mb-0">Quản lý và xác nhận lịch hẹn của bệnh nhân</p>
+                    </div>
+                    <div class="btn-group">
+                        <a th:href="@{/bac-si/dashboard}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i> Quay lại
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Thông báo -->
+                <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <span th:text="${param.success}">Thao tác thành công!</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <span th:text="${param.error}">Có lỗi xảy ra!</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <!-- Bộ lọc và tìm kiếm -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Ngày hẹn</label>
+                                <input type="date" class="form-control" id="filterDate">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Trạng thái</label>
+                                <select class="form-select" id="filterStatus">
+                                    <option value="">Tất cả trạng thái</option>
+                                    <option value="CHO_XAC_NHAN">Chờ xác nhận</option>
+                                    <option value="DA_XAC_NHAN">Đã xác nhận</option>
+                                    <option value="DA_HOAN_THANH">Đã hoàn thành</option>
+                                    <option value="DA_HUY">Đã hủy</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Tên bệnh nhân</label>
+                                <input type="text" class="form-control" placeholder="Tìm theo tên..." id="filterName">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">&nbsp;</label>
+                                <button class="btn btn-primary w-100" onclick="filterAppointments()">
+                                    <i class="fas fa-filter me-2"></i>Lọc
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Thống kê nhanh -->
                 <div class="row mb-4">
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card bg-primary text-white mb-4">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <div class="fs-4 fw-bold" th:text="${tongSoLichHen}">0</div>
-                                        <div>Tổng lịch hẹn</div>
-                                    </div>
-                                    <div class="align-self-center">
-                                        <i class="fas fa-calendar fa-2x"></i>
-                                    </div>
-                                </div>
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body text-center py-3">
+                                <h4 th:text="${totalAppointments}">0</h4>
+                                <small>Tổng lịch hẹn</small>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card bg-warning text-white mb-4">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <div class="fs-4 fw-bold" th:text="${lichHenChoXacNhan}">0</div>
-                                        <div>Chờ xác nhận</div>
-                                    </div>
-                                    <div class="align-self-center">
-                                        <i class="fas fa-clock fa-2x"></i>
-                                    </div>
-                                </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body text-center py-3">
+                                <h4 th:text="${confirmedCount}">0</h4>
+                                <small>Đã xác nhận</small>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card bg-success text-white mb-4">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <div class="fs-4 fw-bold" th:text="${lichHenDaXacNhan}">0</div>
-                                        <div>Đã xác nhận</div>
-                                    </div>
-                                    <div class="align-self-center">
-                                        <i class="fas fa-check-circle fa-2x"></i>
-                                    </div>
-                                </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-dark">
+                            <div class="card-body text-center py-3">
+                                <h4 th:text="${pendingCount}">0</h4>
+                                <small>Chờ xác nhận</small>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="card bg-info text-white mb-4">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <div class="fs-4 fw-bold" th:text="${lichHenHomNay}">0</div>
-                                        <div>Hôm nay</div>
-                                    </div>
-                                    <div class="align-self-center">
-                                        <i class="fas fa-calendar-day fa-2x"></i>
-                                    </div>
-                                </div>
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body text-center py-3">
+                                <h4 th:text="${todayCount}">0</h4>
+                                <small>Hôm nay</small>
                             </div>
                         </div>
                     </div>
@@ -144,10 +214,10 @@
 
                 <!-- Danh sách lịch hẹn -->
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header bg-light">
                         <h5 class="card-title mb-0">
                             <i class="fas fa-list me-2"></i>
-                            Danh sách lịch hẹn
+                            Danh sách Lịch hẹn
                         </h5>
                     </div>
                     <div class="card-body">
@@ -155,60 +225,73 @@
                             <table class="table table-hover">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>#</th>
+                                        <th>Mã LH</th>
                                         <th>Bệnh nhân</th>
                                         <th>Dịch vụ</th>
                                         <th>Thời gian hẹn</th>
-                                        <th>Lý do khám</th>
                                         <th>Trạng thái</th>
                                         <th>Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="lichHen, status : ${lichHens}" th:classappend="'status-' + ${lichHen.trangThai.toString().toLowerCase()}">
-                                        <td th:text="${status.count}">1</td>
+                                    <tr th:each="lichHen : ${lichHens}" class="appointment-card">
                                         <td>
-                                            <strong th:text="${lichHen.benhNhan.hoTen}"></strong>
-                                            <br>
-                                            <small class="text-muted" th:text="${lichHen.benhNhan.soDienThoai}"></small>
+                                            <strong th:text="'#LH' + ${lichHen.id}">#LH001</strong>
                                         </td>
-                                        <td th:text="${lichHen.dichVu.tenDichVu}"></td>
                                         <td>
-                                            <span th:text="${#temporals.format(lichHen.thoiGianHen, 'dd/MM/yyyy HH:mm')}"></span>
+                                            <div class="fw-bold" th:text="${lichHen.nguoiDung?.hoTen}">Nguyễn Văn A</div>
+                                            <small class="text-muted" th:text="${lichHen.nguoiDung?.soDienThoai}">0987654321</small>
                                         </td>
-                                        <td th:text="${lichHen.lyDoKham}"></td>
                                         <td>
-                                            <span th:switch="${lichHen.trangThai}">
-                                                <span th:case="CHO_XAC_NHAN" class="badge bg-warning">Chờ xác nhận</span>
-                                                <span th:case="DA_XAC_NHAN" class="badge bg-primary">Đã xác nhận</span>
-                                                <span th:case="DA_HOAN_THANH" class="badge bg-success">Đã hoàn thành</span>
-                                                <span th:case="DA_HUY" class="badge bg-danger">Đã hủy</span>
-                                                <span th:case="KHONG_DEN" class="badge bg-secondary">Không đến</span>
+                                            <div th:text="${lichHen.dichVu?.tenDichVu}">Khám tổng quát</div>
+                                            <small class="text-muted" th:text="${'₫' + #numbers.formatInteger(lichHen.dichVu?.giaDichVu != null ? lichHen.dichVu.giaDichVu : 0, 3, 'POINT')}">200,000 ₫</small>
+                                        </td>
+                                        <td>
+                                            <div class="fw-bold" th:text="${#temporals.format(lichHen.thoiGianHen, 'dd/MM/yyyy')}">15/12/2024</div>
+                                            <small class="text-muted" th:text="${#temporals.format(lichHen.thoiGianHen, 'HH:mm')}">10:00</small>
+                                        </td>
+                                        <td>
+                                            <span th:if="${lichHen.trangThai == 'DA_XAC_NHAN'}" class="badge bg-success status-badge">
+                                                <i class="fas fa-check me-1"></i>Đã xác nhận
+                                            </span>
+                                            <span th:if="${lichHen.trangThai == 'CHO_XAC_NHAN'}" class="badge bg-warning text-dark status-badge">
+                                                <i class="fas fa-clock me-1"></i>Chờ xác nhận
+                                            </span>
+                                            <span th:if="${lichHen.trangThai == 'DA_HOAN_THANH'}" class="badge bg-info status-badge">
+                                                <i class="fas fa-check-double me-1"></i>Đã hoàn thành
+                                            </span>
+                                            <span th:if="${lichHen.trangThai == 'DA_HUY'}" class="badge bg-danger status-badge">
+                                                <i class="fas fa-times me-1"></i>Đã hủy
                                             </span>
                                         </td>
                                         <td>
                                             <div class="btn-group btn-group-sm">
                                                 <a th:href="@{/bac-si/lich-hen/{id}(id=${lichHen.id})}" 
-                                                   class="btn btn-outline-primary" title="Xem chi tiết">
+                                                   class="btn btn-outline-primary action-btn" title="Xem chi tiết">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a th:if="${lichHen.trangThai == 'CHO_XAC_NHAN' or lichHen.trangThai == 'DA_XAC_NHAN'}"
-                                                   th:href="@{/bac-si/benh-an/tao-moi/{lichHenId}(lichHenId=${lichHen.id})}" 
-                                                   class="btn btn-outline-success" title="Tạo bệnh án">
+                                                <a th:if="${lichHen.trangThai == 'CHO_XAC_NHAN'}"
+                                                   th:href="@{/bac-si/lich-hen/{id}/xac-nhan(id=${lichHen.id})}" 
+                                                   class="btn btn-outline-success action-btn" title="Xác nhận"
+                                                   onclick="return confirm('Xác nhận lịch hẹn này?')">
+                                                    <i class="fas fa-check"></i>
+                                                </a>
+                                                <a th:href="@{/bac-si/benh-an/tao-moi?lichHenId={id}(id=${lichHen.id})}" 
+                                                   class="btn btn-outline-info action-btn" title="Tạo bệnh án">
                                                     <i class="fas fa-file-medical"></i>
                                                 </a>
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr th:if="${#lists.isEmpty(lichHens)}">
-                                        <td colspan="7" class="text-center text-muted py-4">
-                                            <i class="fas fa-calendar-times fa-2x mb-2"></i>
-                                            <br>
-                                            Không có lịch hẹn nào
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
+                        </div>
+
+                        <!-- Thông báo không có lịch hẹn -->
+                        <div th:if="${lichHens == null || lichHens.empty}" class="text-center py-5">
+                            <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+                            <h4 class="text-muted">Chưa có lịch hẹn nào</h4>
+                            <p class="text-muted">Tất cả lịch hẹn sẽ hiển thị tại đây</p>
                         </div>
                     </div>
                 </div>
@@ -216,25 +299,30 @@
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer class="bg-dark text-white mt-5 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <small>&copy; 2024 Hệ thống Bác Sĩ Nha khoa. All rights reserved.</small>
+                </div>
+                <div class="col-md-6 text-end">
+                    <small>Bác sĩ: <span th:text="${bacSi.hoTen}">BS. Nguyễn Văn A</span></small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function filterLichHen(trangThai) {
-            // Logic lọc lịch hẹn theo trạng thái
-            const rows = document.querySelectorAll('tbody tr');
-            rows.forEach(row => {
-                if (trangThai === 'TAT_CA') {
-                    row.style.display = '';
-                } else {
-                    const statusBadge = row.querySelector('.badge');
-                    if (statusBadge) {
-                        const statusText = statusBadge.textContent.trim();
-                        const shouldShow = 
-                            (trangThai === 'CHO_XAC_NHAN' && statusText === 'Chờ xác nhận') ||
-                            (trangThai === 'DA_XAC_NHAN' && statusText === 'Đã xác nhận');
-                        row.style.display = shouldShow ? '' : 'none';
-                    }
-                }
-            });
+        function filterAppointments() {
+            const date = document.getElementById('filterDate').value;
+            const status = document.getElementById('filterStatus').value;
+            const name = document.getElementById('filterName').value;
+            
+            // Thực hiện lọc - có thể gửi request đến server hoặc lọc client-side
+            console.log('Lọc với:', {date, status, name});
+            // TODO: Implement filter logic
         }
     </script>
 </body>
