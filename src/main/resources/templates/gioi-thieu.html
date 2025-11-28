@@ -132,6 +132,7 @@
         }
         footer a.text-white {
             transition: color 0.3s ease, transform 0.3s ease;
+            text-decoration: none;
         }
         footer a.text-white:hover {
             color: var(--primary-color) !important;
@@ -301,38 +302,60 @@
 
     <footer>
         <div class="container">
-
             <div class="row">
-                <div class="col-md-4">
-                    <h5>Nha Khoa Sunshine</h5>
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold">Nha Khoa Sunshine</h5>
                     <p>Chăm sóc nụ cười Việt - Tự tin tỏa sáng</p>
                 </div>
-
-                <div class="col-md-4">
-                    <h5>Liên Hệ</h5>
-                    <p><i class="fas fa-map-marker-alt"></i> 123 Đường ABC, Quận 1, TP.HCM</p>
-                    <p><i class="fas fa-phone"></i> (028) 1234 5678</p>
-                    <p><i class="fas fa-envelope"></i> info@nhakhoasunshine.com</p>
+                
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold">Hỗ Trợ Khách Hàng</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="/lien-he" class="text-white">
+                                <i class="fas fa-headset me-2"></i>Liên hệ & Hỗ trợ
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="/lien-he#faq" class="text-white">
+                                <i class="fas fa-question-circle me-2"></i>Câu hỏi thường gặp
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="/chinh-sach-bao-mat" class="text-white">
+                                <i class="fas fa-user-shield me-2"></i>Chính sách bảo mật
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="/dieu-khoan-su-dung" class="text-white">
+                                <i class="fas fa-file-contract me-2"></i>Điều khoản sử dụng
+                            </a>
+                        </li>
+                    </ul>
                 </div>
 
-                <div class="col-md-4">
-                    <h5>Theo Dõi Chúng Tôi</h5>
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold">Liên Hệ & Theo Dõi</h5>
+                     <ul class="list-unstyled mb-3">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Đường ABC, Quận 1, TP.HCM</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i> Hotline: (028) 1234 5678</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@sunshine.com</li>
+                    </ul>
+                    <div class="social-links mt-3">
                         <a href="https://www.facebook.com/share/19ns4N2UFU/?mibextid=wwXIfr" class="text-white me-3"><i class="fab fa-facebook fa-2x"></i></a>
                         <a href="https://www.instagram.com/beauty.care.vn?igsh=YzdrdXF1OGE3YjZh&utm_source=qr" class="text-white me-3"><i class="fab fa-instagram fa-2x"></i></a>
                         <a href="https://youtube.com/@beautycare-hcm?si=QQ-4xc9Ny3v6dnw0" class="text-white"><i class="fab fa-youtube fa-2x"></i></a>
+                    </div>
                 </div>
             </div>
-
             <hr class="mt-4">
-
             <div class="text-center">
                 <p>&copy; 2024 Nha Khoa Sunshine. All rights reserved.</p>
             </div>
-
         </div>
     </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
