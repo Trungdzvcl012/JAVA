@@ -9,10 +9,13 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.HttpMethod; 
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
+
+import org.springframework.web.client.RestClientException;
 
 @RestController
 @RequestMapping("/api/chat")
@@ -116,7 +119,7 @@ public class ChatAPIController {
             System.err.println("Gemini API Error (Status " + e.getRawStatusCode() + "): " + errorBody);
          
             return "Lỗi API: (" + e.getRawStatusCode() + ") Vui lòng kiểm tra lại API Key. Thông báo chi tiết: " + errorBody;
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             e.printStackTrace(); 
             return "Lỗi Server: Lỗi không xác định. Vui lòng kiểm tra log."; 
         }
