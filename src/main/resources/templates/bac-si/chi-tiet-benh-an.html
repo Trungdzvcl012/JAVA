@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết Bệnh án - Bác Sĩ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .sidebar {
+            background: linear-gradient(135deg, #1e3c72, #2a5298) !important;
+            min-height: 100vh;
+        }
+        .sidebar .nav-link {
+            color: #ecf0f1 !important;
+            padding: 12px 20px;
+            margin: 2px 0;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .sidebar .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+        .sidebar .nav-link.active {
+            background: #3498db;
+            box-shadow: 0 2px 10px rgba(52, 152, 219, 0.3);
+        }
+        .detail-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .info-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .medical-badge {
+            font-size: 0.8rem;
+            padding: 6px 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #1e3c72, #2a5298);">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/bac-si/dashboard}">
+                <i class="fas fa-file-medical me-2"></i>
+                CHI TIẾT BỆNH ÁN
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link text-white" th:href="@{/bac-si/benh-an}">
+                    <i class="fas fa-arrow-left me-1"></i> Danh sách
+                </a>
+                <a class="nav-link text-white" th:href="@{/bac-si/dashboard}">
+                    <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="position-sticky pt-3">
+                    <div class="text-center mb-4">
+                        <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" 
+                             style="width: 60px; height: 60px;">
+                            <i class="fas fa-user-md" style="color: #1e3c72;"></i>
+                        </div>
+                        <h6 class="text-white mb-0" th:text="${bacSi.hoTen}">BS. Nguyễn Văn A</h6>
+                        <small class="text-light opacity-75">Bác sĩ nha khoa</small>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/bac-si/dashboard}">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/bac-si/lich-hen}">
+                                <i class="fas fa-calendar-alt me-2"></i>
+                                Quản lý Lịch hẹn
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/bac-si/benh-an}">
+                                <i class="fas fa-file-medical me-2"></i>
+                                Quản lý Bệnh án
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/bac-si/lich-lam-viec}">
+                                <i class="fas fa-calendar-check me-2"></i>
+                                Lịch làm việc
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/bac-si/thong-ke}">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                Thống kê cá nhân
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <div>
+                        <h1 class="h2 mb-1">
+                            <i class="fas fa-file-medical text-success me-2"></i>
+                            Chi tiết Bệnh án
+                        </h1>
+                        <p class="text-muted mb-0">Thông tin chi tiết hồ sơ bệnh án</p>
+                    </div>
+                    <div class="btn-group">
+                        <a th:href="@{/bac-si/benh-an/{id}/chinh-sua(id=${benhAn.id})}" class="btn btn-warning">
+                            <i class="fas fa-edit me-2"></i> Chỉnh sửa
+                        </a>
+                        <a th:href="@{/bac-si/benh-an}" class="btn btn-secondary">
+                            <i class="fas fa-list me-2"></i> Danh sách
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Thông báo -->
+                <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <span th:text="${param.success}">Cập nhật thành công!</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <!-- Thông tin cơ bản -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card detail-card">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    Thông tin cơ bản
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <strong>Mã bệnh án:</strong>
+                                        <div class="fw-bold" th:text="'BA' + ${benhAn.id}">BA001</div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Bệnh nhân:</strong>
+                                        <div class="fw-bold" th:text="${benhAn.lichHen?.nguoiDung?.hoTen}">Nguyễn Văn A</div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Bác sĩ phụ trách:</strong>
+                                        <div th:text="${benhAn.bacSi?.hoTen}">BS. Trần Thị B</div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Ngày tạo:</strong>
+                                        <div th:text="${#temporals.format(benhAn.thoiGianTao, 'dd/MM/yyyy HH:mm')}">15/12/2024 10:00</div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-3">
+                                        <strong>Số điện thoại:</strong>
+                                        <div th:text="${benhAn.lichHen?.nguoiDung?.soDienThoai}">0987654321</div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Dịch vụ:</strong>
+                                        <div th:text="${benhAn.lichHen?.dichVu?.tenDichVu}">Khám tổng quát</div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Thời gian khám:</strong>
+                                        <div th:text="${#temporals.format(benhAn.lichHen?.thoiGianHen, 'dd/MM/yyyy HH:mm')}">15/12/2024 10:00</div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Cập nhật lần cuối:</strong>
+                                        <div th:text="${#temporals.format(benhAn.thoiGianCapNhat, 'dd/MM/yyyy HH:mm')}">15/12/2024 11:00</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thông tin y tế -->
+                <div class="row">
+                    <!-- Chẩn đoán -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card detail-card h-100">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-stethoscope me-2"></i>
+                                    Chẩn đoán
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div th:if="${benhAn.chanDoan}" th:text="${benhAn.chanDoan}" class="medical-content">
+                                    Sâu răng hàm lớn số 6, viêm nướu nhẹ.
+                                </div>
+                                <div th:unless="${benhAn.chanDoan}" class="text-center text-muted py-3">
+                                    <i class="fas fa-exclamation-circle fa-2x mb-2"></i>
+                                    <p>Chưa có thông tin chẩn đoán</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phác đồ điều trị -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card detail-card h-100">
+                            <div class="card-header bg-warning text-dark">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-clipboard-list me-2"></i>
+                                    Phác đồ điều trị
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div th:if="${benhAn.phacDoDieuTri}" th:text="${benhAn.phacDoDieuTri}" class="medical-content">
+                                    1. Trám răng composite<br>
+                                    2. Vệ sinh răng miệng<br>
+                                    3. Tái khám sau 1 tuần
+                                </div>
+                                <div th:unless="${benhAn.phacDoDieuTri}" class="text-center text-muted py-3">
+                                    <i class="fas fa-exclamation-circle fa-2x mb-2"></i>
+                                    <p>Chưa có phác đồ điều trị</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Đơn thuốc -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card detail-card h-100">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-pills me-2"></i>
+                                    Đơn thuốc
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div th:if="${benhAn.donThuoc}" th:text="${benhAn.donThuoc}" class="medical-content">
+                                    - Amoxicillin 500mg: 2 viên/ngày (7 ngày)<br>
+                                    - Paracetamol 500mg: Khi đau<br>
+                                    - Nước súc miệng: 2 lần/ngày
+                                </div>
+                                <div th:unless="${benhAn.donThuoc}" class="text-center text-muted py-3">
+                                    <i class="fas fa-exclamation-circle fa-2x mb-2"></i>
+                                    <p>Chưa có đơn thuốc</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ghi chú & Hình ảnh -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card detail-card h-100">
+                            <div class="card-header bg-secondary text-white">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-notes-medical me-2"></i>
+                                    Thông tin bổ sung
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <!-- Ghi chú -->
+                                <div class="mb-3">
+                                    <strong>Ghi chú:</strong>
+                                    <div th:if="${benhAn.ghiChu}" th:text="${benhAn.ghiChu}" class="mt-1">
+                                        Bệnh nhân cần hẹn tái khám để kiểm tra tiến triển.
+                                    </div>
+                                    <div th:unless="${benhAn.ghiChu}" class="text-muted mt-1">
+                                        Không có ghi chú
+                                    </div>
+                                </div>
+
+                                <!-- Hình ảnh -->
+                                <div>
+                                    <strong>Hình ảnh:</strong>
+                                    <div class="mt-2">
+                                        <div th:if="${benhAn.hinhAnhXQuang}" class="mb-2">
+                                            <i class="fas fa-x-ray me-2"></i>
+                                            <span th:text="${benhAn.hinhAnhXQuang}">X-quang_001.jpg</span>
+                                        </div>
+                                        <div th:if="${benhAn.hinhAnhKhac}" class="mb-2">
+                                            <i class="fas fa-image me-2"></i>
+                                            <span th:text="${benhAn.hinhAnhKhac}">Hinh_khac_001.jpg</span>
+                                        </div>
+                                        <div th:unless="${benhAn.hinhAnhXQuang && benhAn.hinhAnhKhac}" class="text-muted">
+                                            Không có hình ảnh đính kèm
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white mt-5 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <small>&copy; 2024 Hệ thống Bác Sĩ Nha khoa. All rights reserved.</small>
+                </div>
+                <div class="col-md-6 text-end">
+                    <small>Bệnh án: <span th:text="'BA' + ${benhAn.id}">BA001</span></small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Bác Sĩ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .sidebar {
+            background: linear-gradient(135deg, #1e3c72, #2a5298) !important;
+            min-height: 100vh;
+        }
+        .sidebar .nav-link {
+            color: #ecf0f1 !important;
+            padding: 12px 20px;
+            margin: 2px 0;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .sidebar .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+        .sidebar .nav-link.active {
+            background: #3498db;
+            box-shadow: 0 2px 10px rgba(52, 152, 219, 0.3);
+        }
+        .stat-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 10px;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .quick-action-btn {
+            transition: all 0.3s ease;
+            border: 2px solid;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        .quick-action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #1e3c72, #2a5298);">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/bac-si/dashboard}">
+                <i class="fas fa-user-md me-2"></i>
+                HỆ THỐNG BÁC SĨ - NHA KHOA SUNSHINE
+            </a>
+            <div class="navbar-nav ms-auto">
+                <span class="nav-link text-white">
+                    <i class="fas fa-user me-1"></i> 
+                    <span th:text="${bacSi.hoTen}">Bác Sĩ</span>
+                </span>
+                <a class="nav-link text-white" th:href="@{/}">
+                    <i class="fas fa-home me-1"></i> Trang chủ
+                </a>
+                <a class="nav-link text-white" th:href="@{/dang-xuat}">
+                    <i class="fas fa-sign-out-alt me-1"></i> Đăng xuất
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar & Main Content -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="position-sticky pt-3">
+                    <div class="text-center mb-4">
+                        <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" 
+                             style="width: 80px; height: 80px;">
+                            <i class="fas fa-user-md fa-2x" style="color: #1e3c72;"></i>
+                        </div>
+                        <h6 class="text-white mb-0" th:text="${bacSi.hoTen}">BS. Nguyễn Văn A</h6>
+                        <small class="text-light opacity-75">Bác sĩ nha khoa</small>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" th:href="@{/bac-si/dashboard}">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/bac-si/lich-hen}">
+                                <i class="fas fa-calendar-alt me-2"></i>
+                                Quản lý Lịch hẹn
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/bac-si/benh-an}">
+                                <i class="fas fa-file-medical me-2"></i>
+                                Quản lý Bệnh án
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/bac-si/lich-lam-viec}">
+                                <i class="fas fa-calendar-check me-2"></i>
+                                Lịch làm việc
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/bac-si/thong-ke}">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                Thống kê cá nhân
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <!-- Quick Stats in Sidebar -->
+                    <div class="mt-4 p-3 bg-dark rounded">
+                        <h6 class="text-white mb-3">Thống kê hôm nay</h6>
+                        <div class="text-white small">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Lịch hẹn:</span>
+                                <span class="fw-bold" th:text="${lichHenHomNay}">0</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Đã khám:</span>
+                                <span class="fw-bold" th:text="${daKhamHomNay}">0</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Chờ xác nhận:</span>
+                                <span class="fw-bold" th:text="${choXacNhanHomNay}">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Header -->
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <div>
+                        <h1 class="h2 mb-1">
+                            <i class="fas fa-tachometer-alt text-primary me-2"></i>
+                            Dashboard Bác Sĩ
+                        </h1>
+                        <p class="text-muted mb-0">Quản lý lịch hẹn và bệnh án của bệnh nhân</p>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-outline-primary">
+                            <i class="fas fa-sync-alt me-2"></i>Làm mới
+                        </button>
+                        <a th:href="@{/bac-si/lich-hen}" class="btn btn-outline-success">
+                            <i class="fas fa-calendar-plus me-2"></i>Xem lịch hẹn
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Thống kê chính -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-4">
+                        <div class="card text-white bg-primary stat-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h2 class="mb-0" th:text="${tongSoLichHen}">0</h2>
+                                        <p class="mb-0">Tổng lịch hẹn</p>
+                                        <small><i class="fas fa-calendar me-1"></i> Tất cả thời gian</small>
+                                    </div>
+                                    <div class="display-4 opacity-50">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card text-white bg-success stat-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h2 class="mb-0" th:text="${lichHenDaXacNhan}">0</h2>
+                                        <p class="mb-0">Đã xác nhận</p>
+                                        <small><i class="fas fa-check-circle me-1"></i> Sắp diễn ra</small>
+                                    </div>
+                                    <div class="display-4 opacity-50">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card text-white bg-warning stat-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h2 class="mb-0" th:text="${lichHenChoXacNhan}">0</h2>
+                                        <p class="mb-0">Chờ xác nhận</p>
+                                        <small><i class="fas fa-clock me-1"></i> Cần xử lý</small>
+                                    </div>
+                                    <div class="display-4 opacity-50">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card text-white bg-info stat-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h2 class="mb-0" th:text="${tongBenhAn}">0</h2>
+                                        <p class="mb-0">Bệnh án</p>
+                                        <small><i class="fas fa-file-medical me-1"></i> Đã tạo</small>
+                                    </div>
+                                    <div class="display-4 opacity-50">
+                                        <i class="fas fa-file-medical"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick actions -->
+                <div class="row mb-4">
+                    <div class="col-md-4 mb-3">
+                        <a th:href="@{/bac-si/lich-hen}" class="btn btn-outline-primary quick-action-btn w-100">
+                            <i class="fas fa-calendar-alt fa-2x mb-2"></i>
+                            <h6>Quản lý Lịch hẹn</h6>
+                            <small class="text-muted">Xem và xác nhận lịch hẹn</small>
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <a th:href="@{/bac-si/benh-an/tao-moi}" class="btn btn-outline-success quick-action-btn w-100">
+                            <i class="fas fa-file-medical fa-2x mb-2"></i>
+                            <h6>Tạo Bệnh án</h6>
+                            <small class="text-muted">Tạo bệnh án mới</small>
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <a th:href="@{/bac-si/lich-lam-viec}" class="btn btn-outline-info quick-action-btn w-100">
+                            <i class="fas fa-calendar-check fa-2x mb-2"></i>
+                            <h6>Lịch làm việc</h6>
+                            <small class="text-muted">Quản lý lịch trình</small>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Lịch hẹn sắp tới -->
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-calendar-day text-primary me-2"></i>
+                                    Lịch hẹn hôm nay
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div th:if="${lichHenHomNay != null && !lichHenHomNay.empty}" class="list-group list-group-flush">
+                                    <div th:each="lichHen : ${lichHenHomNay}" class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="fw-bold" th:text="${lichHen.benhNhan?.hoTen}">Nguyễn Văn A</div>
+                                            <small class="text-muted" th:text="${lichHen.dichVu?.tenDichVu}">Khám tổng quát</small>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="fw-bold" th:text="${#temporals.format(lichHen.thoiGianHen, 'HH:mm')}">10:00</div>
+                                            <span th:if="${lichHen.trangThai == 'DA_XAC_NHAN'}" class="badge bg-success">Đã xác nhận</span>
+                                            <span th:if="${lichHen.trangThai == 'CHO_XAC_NHAN'}" class="badge bg-warning">Chờ xác nhận</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:if="${lichHenHomNay == null || lichHenHomNay.empty}" class="text-center py-3">
+                                    <i class="fas fa-calendar-times text-muted fa-2x mb-2"></i>
+                                    <p class="text-muted mb-0">Không có lịch hẹn nào hôm nay</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-history text-info me-2"></i>
+                                    Hoạt động gần đây
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group list-group-flush">
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <i class="fas fa-file-medical text-success me-2"></i>
+                                            <span>Đã tạo bệnh án mới</span>
+                                        </div>
+                                        <small class="text-muted">15 phút trước</small>
+                                    </div>
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <i class="fas fa-calendar-check text-primary me-2"></i>
+                                            <span>Đã xác nhận lịch hẹn</span>
+                                        </div>
+                                        <small class="text-muted">1 giờ trước</small>
+                                    </div>
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <i class="fas fa-user-clock text-warning me-2"></i>
+                                            <span>Lịch hẹn mới chờ xác nhận</span>
+                                        </div>
+                                        <small class="text-muted">2 giờ trước</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white mt-5 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <small>&copy; 2024 Hệ thống Bác Sĩ Nha khoa. All rights reserved.</small>
+                </div>
+                <div class="col-md-6 text-end">
+                    <small>Bác sĩ: <span th:text="${bacSi.hoTen}">BS. Nguyễn Văn A</span></small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

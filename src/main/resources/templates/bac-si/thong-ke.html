@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống kê cá nhân - Bác Sĩ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .sidebar {
+            background: linear-gradient(135deg, #1e3c72, #2a5298) !important;
+            min-height: 100vh;
+        }
+        .sidebar .nav-link {
+            color: #ecf0f1 !important;
+            padding: 12px 20px;
+            margin: 2px 0;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        .sidebar .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+        .sidebar .nav-link.active {
+            background: #3498db;
+            box-shadow: 0 2px 10px rgba(52, 152, 219, 0.3);
+        }
+        .stat-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 10px;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #1e3c72, #2a5298);">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/bac-si/dashboard}">
+                <i class="fas fa-chart-bar me-2"></i>
+                THỐNG KÊ CÁ NHÂN - BÁC SĨ
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link text-white" th:href="@{/bac-si/dashboard}">
+                    <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+                </a>
+                <a class="nav-link text-white" th:href="@{/}">
+                    <i class="fas fa-home me-1"></i> Trang chủ
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar">
+                <div class="position-sticky pt-3">
+                    <div class="text-center mb-4">
+                        <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" 
+                             style="width: 60px; height: 60px;">
+                            <i class="fas fa-user-md" style="color: #1e3c72;"></i>
+                        </div>
+                        <h6 class="text-white mb-0" th:text="${bacSi.hoTen}">BS. Nguyễn Văn A</h6>
+                        <small class="text-light opacity-75">Bác sĩ nha khoa</small>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/bac-si/dashboard}">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/bac-si/lich-hen}">
+                                <i class="fas fa-calendar-alt me-2"></i>
+                                Quản lý Lịch hẹn
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/bac-si/benh-an}">
+                                <i class="fas fa-file-medical me-2"></i>
+                                Quản lý Bệnh án
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/bac-si/lich-lam-viec}">
+                                <i class="fas fa-calendar-check me-2"></i>
+                                Lịch làm việc
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" th:href="@{/bac-si/thong-ke}">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                Thống kê cá nhân
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Header -->
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <div>
+                        <h1 class="h2 mb-1">
+                            <i class="fas fa-chart-bar text-primary me-2"></i>
+                            Thống kê Cá nhân
+                        </h1>
+                        <p class="text-muted mb-0">Phân tích hiệu suất và số liệu làm việc</p>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-outline-primary" id="monthlyBtn">Tháng</button>
+                        <button class="btn btn-outline-primary active" id="quarterlyBtn">Quý</button>
+                        <button class="btn btn-outline-primary" id="yearlyBtn">Năm</button>
+                    </div>
+                </div>
+
+                <!-- Thống kê tổng quan -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-4">
+                        <div class="card text-white bg-primary stat-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h2 class="mb-0" th:text="${totalAppointments}">0</h2>
+                                        <p class="mb-0">Tổng lịch hẹn</p>
+                                        <small><i class="fas fa-calendar me-1"></i> Tất cả thời gian</small>
+                                    </div>
+                                    <div class="display-4 opacity-50">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card text-white bg-success stat-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h2 class="mb-0" th:text="${completedAppointments}">0</h2>
+                                        <p class="mb-0">Đã hoàn thành</p>
+                                        <small><i class="fas fa-check-circle me-1"></i> Thành công</small>
+                                    </div>
+                                    <div class="display-4 opacity-50">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card text-white bg-info stat-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h2 class="mb-0" th:text="${totalMedicalRecords}">0</h2>
+                                        <p class="mb-0">Bệnh án</p>
+                                        <small><i class="fas fa-file-medical me-1"></i> Đã tạo</small>
+                                    </div>
+                                    <div class="display-4 opacity-50">
+                                        <i class="fas fa-file-medical"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card text-white bg-warning stat-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h2 class="mb-0" th:text="${satisfactionRate}">0%</h2>
+                                        <p class="mb-0">Hài lòng</p>
+                                        <small><i class="fas fa-smile me-1"></i> Đánh giá</small>
+                                    </div>
+                                    <div class="display-4 opacity-50">
+                                        <i class="fas fa-smile"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Biểu đồ và phân tích -->
+                <div class="row">
+                    <!-- Biểu đồ lịch hẹn theo tháng -->
+                    <div class="col-md-8 mb-4">
+                        <div class="chart-container">
+                            <h5 class="card-title mb-3">
+                                <i class="fas fa-chart-line me-2"></i>
+                                Lịch hẹn theo tháng
+                            </h5>
+                            <div style="height: 300px; background: #f8f9fa; border-radius: 5px; display: flex; align-items: center; justify-content: center;">
+                                <div class="text-center text-muted">
+                                    <i class="fas fa-chart-bar fa-3x mb-3"></i>
+                                    <p>Biểu đồ sẽ hiển thị tại đây</p>
+                                    <small>Số liệu thống kê lịch hẹn theo từng tháng</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phân loại dịch vụ -->
+                    <div class="col-md-4 mb-4">
+                        <div class="chart-container">
+                            <h5 class="card-title mb-3">
+                                <i class="fas fa-pie-chart me-2"></i>
+                                Phân loại dịch vụ
+                            </h5>
+                            <div style="height: 300px; background: #f8f9fa; border-radius: 5px; display: flex; align-items: center; justify-content: center;">
+                                <div class="text-center text-muted">
+                                    <i class="fas fa-chart-pie fa-3x mb-3"></i>
+                                    <p>Biểu đồ tròn sẽ hiển thị tại đây</p>
+                                    <small>Tỷ lệ các loại dịch vụ đã thực hiện</small>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Khám tổng quát</span>
+                                    <span class="fw-bold">40%</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Nhổ răng</span>
+                                    <span class="fw-bold">25%</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Trám răng</span>
+                                    <span class="fw-bold">20%</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Khác</span>
+                                    <span class="fw-bold">15%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thống kê chi tiết -->
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="chart-container">
+                            <h5 class="card-title mb-3">
+                                <i class="fas fa-tasks me-2"></i>
+                                Hiệu suất làm việc
+                            </h5>
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <div class="border rounded p-3">
+                                        <h3 class="text-primary" th:text="${avgAppointmentsPerDay}">5.2</h3>
+                                        <small class="text-muted">Lịch hẹn/ngày</small>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="border rounded p-3">
+                                        <h3 class="text-success" th:text="${completionRate}">85%</h3>
+                                        <small class="text-muted">Tỷ lệ hoàn thành</small>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="border rounded p-3">
+                                        <h3 class="text-info" th:text="${avgRating}">4.8</h3>
+                                        <small class="text-muted">Đánh giá trung bình</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <h6>Tiến độ tháng hiện tại</h6>
+                                <div class="progress mb-2" style="height: 20px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 75%;" 
+                                         aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+                                        75% Hoàn thành
+                                    </div>
+                                </div>
+                                <small class="text-muted">Đã hoàn thành 75/100 lịch hẹn trong tháng</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <div class="chart-container">
+                            <h5 class="card-title mb-3">
+                                <i class="fas fa-trophy me-2"></i>
+                                Thành tích nổi bật
+                            </h5>
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="fas fa-award text-warning me-2"></i>
+                                        <span>Tháng có lịch hẹn nhiều nhất</span>
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill" th:text="${bestMonth}">Tháng 6</span>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="fas fa-star text-warning me-2"></i>
+                                        <span>Dịch vụ phổ biến nhất</span>
+                                    </div>
+                                    <span class="badge bg-success rounded-pill" th:text="${mostPopularService}">Khám tổng quát</span>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="fas fa-clock text-info me-2"></i>
+                                        <span>Thời gian làm việc trung bình</span>
+                                    </div>
+                                    <span class="badge bg-info rounded-pill" th:text="${avgWorkingHours}">8h/ngày</span>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="fas fa-calendar-check text-success me-2"></i>
+                                        <span>Ngày làm việc hiệu quả nhất</span>
+                                    </div>
+                                    <span class="badge bg-success rounded-pill" th:text="${mostProductiveDay}">Thứ 4</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white mt-5 py-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <small>&copy; 2024 Hệ thống Bác Sĩ Nha khoa. All rights reserved.</small>
+                </div>
+                <div class="col-md-6 text-end">
+                    <small>Bác sĩ: <span th:text="${bacSi.hoTen}">BS. Nguyễn Văn A</span></small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('monthlyBtn').addEventListener('click', function() {
+            setActiveButton(this);
+            // TODO: Load monthly data
+        });
+
+        document.getElementById('quarterlyBtn').addEventListener('click', function() {
+            setActiveButton(this);
+            // TODO: Load quarterly data
+        });
+
+        document.getElementById('yearlyBtn').addEventListener('click', function() {
+            setActiveButton(this);
+            // TODO: Load yearly data
+        });
+
+        function setActiveButton(button) {
+            // Remove active class from all buttons
+            document.querySelectorAll('.btn-group .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // Add active class to clicked button
+            button.classList.add('active');
+        }
+    </script>
+</body>
+</html>
