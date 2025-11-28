@@ -324,6 +324,14 @@
     </div>
 </nav>
 
+<div class="container mt-3" th:if="${thongBao}">
+    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        <span th:text="${thongBao}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+
 <section class="hero-section">
     <div class="container">
         <h1 class="display-4 fw-bold mb-4">Nụ Cười Tỏa Sáng – Tự Tin Tỏa Sáng</h1>
