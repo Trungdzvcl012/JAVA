@@ -1,41 +1,51 @@
-<!-- src/main/resources/templates/fragments/header.html -->
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
 <body>
-<nav th:fragment="header" class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container">
-        <a class="navbar-brand" href="/trang-chu">
-            <i class="fas fa-tooth me-2"></i> Nha Khoa Sunshine
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="/trang-chu">Trang Chủ</a></li>
-                <li class="nav-item"><a class="nav-link" href="/dich-vu">Dịch Vụ</a></li>
-                <li class="nav-item"><a class="nav-link" href="/bac-si">Bác Sĩ</a></li>
-                <li class="nav-item"><a class="nav-link" href="/lich-hen/cua-toi">Lịch Hẹn</a></li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-user me-1"></i>
-                        <span th:text="${nguoiDung?.hoTen} ?: 'Tài khoản'"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" th:href="@{/nguoi-dung/ho-so}">Hồ Sơ</a></li>
-                        <li><a class="dropdown-item" href="/lich-hen/cua-toi">Lịch Hẹn Của Tôi</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <form th:action="@{/dang-xuat}" method="post">
-                                <button type="submit" class="dropdown-item">Đăng Xuất</button>
-                            </form>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+    <nav th:fragment="header" class="navbar navbar-expand-lg navbar-dark custom-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="/trang-chu">
+                <i class="fas fa-tooth me-2"></i>
+                Nha Khoa Sunshine
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/trang-chu">Trang Chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dich-vu">Dịch Vụ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/bac-si">Bác Sĩ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/lich-hen/cua-toi">Lịch Hẹn</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user me-1"></i>
+                            <span th:text="${nguoiDung?.hoTen} ?: 'Tài khoản'"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Hồ Sơ</a></li>
+                            <li><a class="dropdown-item" href="/lich-hen/cua-toi">Lịch Hẹn Của Tôi</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/dang-xuat}" method="post">
+                                    <button type="submit" class="dropdown-item">Đăng Xuất</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
-<script src="/js/bootstrap.bundle.min.js"></script>
+    </nav>
 </body>
 </html>
