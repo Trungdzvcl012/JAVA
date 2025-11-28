@@ -39,16 +39,16 @@
         .dropdown-item { padding: 10px 20px; font-weight: 500; }
         .dropdown-item:hover { background-color: var(--secondary-color); color: var(--accent-color); }
 
-        /* HERO SECTION (Đã chỉnh sửa để gọn hơn) */
+        /* HERO SECTION */
         .hero-dashboard {
             background: linear-gradient(rgba(2, 136, 209, 0.85), rgba(1, 87, 155, 0.9)), url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
             background-size: cover; background-position: center; color: white;
-            padding: 80px 0; /* Giảm padding để không quá cao */
+            padding: 80px 0;
             position: relative;
         }
 
         /* DASHBOARD CARDS */
-        .dashboard-cards-container { margin-top: 30px; } /* Tạo khoảng cách dương */
+        .dashboard-cards-container { margin-top: 30px; }
         .action-card {
             background: white; border-radius: 20px; padding: 30px; text-align: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: transform 0.3s ease; height: 100%;
@@ -82,7 +82,7 @@
         }
         .service-card:hover .service-icon { transform: scale(1.1); }
 
-        /* --- [MỚI] CSS CHO BANNER QUIZ --- */
+        /* QUIZ BANNER */
         .quiz-banner {
             background: linear-gradient(45deg, #ffffff, #e3f2fd);
             border-radius: 20px; padding: 40px;
@@ -99,8 +99,8 @@
 
         /* FOOTER */
         footer { background: linear-gradient(135deg, var(--accent-color), #01579b); color: white; padding: 50px 0 20px; }
-        footer a.text-white { transition: color 0.3s ease; }
-        footer a.text-white:hover { color: var(--primary-color) !important; }
+        footer a { color: white !important; transition: 0.3s; text-decoration: none; }
+        footer a:hover { color: var(--primary-color) !important; }
     </style>
 </head>
 <body>
@@ -255,15 +255,41 @@
                     <h5 class="fw-bold">Nha Khoa Sunshine</h5>
                     <p>Chăm sóc nụ cười Việt - Tự tin tỏa sáng</p>
                 </div>
+                
                 <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold">Liên Hệ</h5>
-                    <p><i class="fas fa-map-marker-alt"></i> 123 Đường ABC, Quận 1, TP.HCM</p>
-                    <p><i class="fas fa-phone"></i> (028) 1234 5678</p>
-                    <p><i class="fas fa-envelope"></i> info@nhakhoasunshine.com</p>
+                    <h5 class="fw-bold">Hỗ Trợ Khách Hàng</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="/lien-he" class="text-white">
+                                <i class="fas fa-headset me-2"></i>Liên hệ & Hỗ trợ
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="/lien-he#faq" class="text-white">
+                                <i class="fas fa-question-circle me-2"></i>Câu hỏi thường gặp
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="/chinh-sach-bao-mat" class="text-white">
+                                <i class="fas fa-user-shield me-2"></i>Chính sách bảo mật
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="/dieu-khoan-su-dung" class="text-white">
+                                <i class="fas fa-file-contract me-2"></i>Điều khoản sử dụng
+                            </a>
+                        </li>
+                    </ul>
                 </div>
+
                 <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold">Theo Dõi Chúng Tôi</h5>
-                    <div class="social-links">
+                    <h5 class="fw-bold">Liên Hệ & Theo Dõi</h5>
+                     <ul class="list-unstyled mb-3">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Đường ABC, Quận 1, TP.HCM</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i> Hotline: (028) 1234 5678</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@sunshine.com</li>
+                    </ul>
+                    <div class="social-links mt-3">
                         <a href="https://www.facebook.com/share/19ns4N2UFU/?mibextid=wwXIfr" class="text-white me-3"><i class="fab fa-facebook fa-2x"></i></a>
                         <a href="https://www.instagram.com/beauty.care.vn?igsh=YzdrdXF1OGE3YjZh&utm_source=qr" class="text-white me-3"><i class="fab fa-instagram fa-2x"></i></a>
                         <a href="https://youtube.com/@beautycare-hcm?si=QQ-4xc9Ny3v6dnw0" class="text-white"><i class="fab fa-youtube fa-2x"></i></a>
